@@ -15,5 +15,19 @@ public class Atendente {
     @Column(name = "nome_atendente")
     private String nomeAtendente;
 
+    public Long getIdAtendente() {
+        return idAtendente;
+    }
 
+    public void setIdAtendente(Long idAtendente) {
+        this.idAtendente = idAtendente;
+    }
+
+    public String getNomeAtendente() {
+        return nomeAtendente;
+    }
+
+    public void setNomeAtendente(String nomeAtendente) {
+        this.nomeAtendente = nomeAtendente;
+    }
 }
