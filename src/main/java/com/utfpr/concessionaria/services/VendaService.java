@@ -10,14 +10,11 @@ import java.util.Date;
 
 @Service
 @Slf4j  // log4j
-public class BuyCarService {
+public class VendaService {
 
     public Date venda;
     public Cliente cliente;
     public Carro carro;
     public Atendente atendente;
     //log.info("Venda realizada com sucesso!", item.getdescricao());
-
-
-
 }
