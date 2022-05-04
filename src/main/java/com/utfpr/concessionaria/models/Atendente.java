@@ -1,10 +1,17 @@
 package com.utfpr.concessionaria.models;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import lombok.*;
 
+import javax.persistence.*;
+
+
+@Entity(name = "tb_atendente")
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
 public class Atendente {
 
     @Id
@@ -15,19 +22,5 @@ public class Atendente {
     @Column(name = "nome_atendente")
     private String nomeAtendente;
 
-    public Long getIdAtendente() {
-        return idAtendente;
-    }
 
-    public void setIdAtendente(Long idAtendente) {
-        this.idAtendente = idAtendente;
-    }
-
-    public String getNomeAtendente() {
-        return nomeAtendente;
-    }
-
-    public void setNomeAtendente(String nomeAtendente) {
-        this.nomeAtendente = nomeAtendente;
-    }
 }
