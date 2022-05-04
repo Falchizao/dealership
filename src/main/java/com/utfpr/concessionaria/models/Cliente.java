@@ -12,6 +12,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @ToString
 public class Cliente {
+    // Atributos
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
