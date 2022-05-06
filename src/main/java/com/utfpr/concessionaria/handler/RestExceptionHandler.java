@@ -1,12 +1,14 @@
 package com.utfpr.concessionaria.handler;
 
+import com.utfpr.concessionaria.modelException.error.ErrorMessage;
+import com.utfpr.concessionaria.modelException.exception.ResourceNotFound;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice  class RestExceptionHandler {
-
+    
     @ExceptionHandler(ResourceNotFound.class)
     public ResponseEntity<?> handleResourceNotFoundException(ResourceNotFound ex){
 
