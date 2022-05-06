@@ -1,4 +1,4 @@
-package com.utfpr.concessionaria.models;
+package com.utfpr.concessionaria.entities;
 
 import lombok.*;
 
