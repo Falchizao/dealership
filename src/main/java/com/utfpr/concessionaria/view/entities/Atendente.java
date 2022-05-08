@@ -1,4 +1,4 @@
-package com.utfpr.concessionaria.models;
+package com.utfpr.concessionaria.view.entities;
 
 import lombok.*;
 
@@ -17,9 +17,9 @@ public class Atendente {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_atendente")
-    private Long idAtendente;
+    public Long idAtendente;
 
-    @Column(name = "nome_atendente")
+    @Column(name = "nome_atendente", length = 255, nullable = false)
     private String nomeAtendente;
 
 

@@ -1,4 +1,4 @@
-package com.utfpr.concessionaria.models;
+package com.utfpr.concessionaria.view.entities;
 
 import lombok.*;
 
@@ -19,24 +19,22 @@ public class Carro {
     @Column(name = "id_carro")
     private Long idCarro;
 
-    @Column(length = 255, nullable = false)
+    @Column(name = "modelo_carro", length = 255, nullable = false)
     private String modelo;
 
-    @Column(length = 255, nullable = false)
+    @Column(name = "marca_carro", length = 255, nullable = false)
     private String marca;
 
-    @Column(length = 255, nullable = false)
+    @Column(name = "cor_carro", length = 255, nullable = false)
     private String cor;
 
-    @Column(nullable = false)
+    @Column(name = "data_carro",nullable = false)
     private Date ano;
 
-    @Column(length = 7, nullable = false)
+    @Column(name = "placa_carro", length = 7, nullable = false)
     private String placa;
 
-    @Column(length = 17, nullable = false)
+    @Column(name = "chassi_carro",length = 17, nullable = false)
     private String chassi;
-
-
 
 }
