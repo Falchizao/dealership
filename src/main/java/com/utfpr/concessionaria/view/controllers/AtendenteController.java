@@ -32,13 +32,13 @@ public class AtendenteController {
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<AtendenteResponse>> getAtendente(@PathVariable Integer id){
+    public ResponseEntity<Optional<AtendenteResponse>> getAtendente(@PathVariable Long id){
 
-        Optional<AtendenteDTO> dto = atendenteService.getAtendenteById(id); //Here we need to attribute the personDTO to another variable
-        ModelMapper map = new ModelMapper(); //then we cast into Response class
+        Optional<AtendenteDTO> dto = atendenteService.getAtendenteById(id);
+        ModelMapper map = new ModelMapper();
         AtendenteResponse atendente = map.map(dto, AtendenteResponse.class);
 
-        return new ResponseEntity<>(Optional.of(atendente), HttpStatus.OK);  //Don't forget it's optional, since its looking for its id
+        return new ResponseEntity<>(Optional.of(atendente), HttpStatus.OK);
     }
 
 
@@ -53,14 +53,14 @@ public class AtendenteController {
 
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteAtendente(@PathVariable Integer id){
+    public ResponseEntity<?> deleteAtendente(@PathVariable Long id){
         atendenteService.deleteAtendente(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 
     @PutMapping("/{id}")
-    public ResponseEntity<AtendenteResponse> uptadePerson(@RequestBody AtendenteRequest atendente, @PathVariable Integer id){
+    public ResponseEntity<AtendenteResponse> uptadeAtendente(@RequestBody AtendenteRequest atendente, @PathVariable Long id){
 
         ModelMapper mapper = new ModelMapper();
         AtendenteDTO dto = mapper.map(atendente, AtendenteDTO.class);
