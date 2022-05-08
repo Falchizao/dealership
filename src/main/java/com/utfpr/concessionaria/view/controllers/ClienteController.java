@@ -30,13 +30,13 @@ public class ClienteController {
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<ClienteResponse>> getPersonById(@PathVariable Integer id){
+    public ResponseEntity<Optional<ClienteResponse>> getPersonById(@PathVariable Long id){
 
-        Optional<ClienteDTO> dto = clientesCRUDservice.getPersonById(id); //Here we need to attribute the personDTO to another variable
-        ModelMapper map = new ModelMapper(); //then we cast into Response class
+        Optional<ClienteDTO> dto = clientesCRUDservice.getPersonById(id);
+        ModelMapper map = new ModelMapper();
         ClienteResponse person = map.map(dto, ClienteResponse.class);
 
-        return new ResponseEntity<>(Optional.of(person), HttpStatus.OK);  //Don't forget it's optional, since its looking for its id
+        return new ResponseEntity<>(Optional.of(person), HttpStatus.OK);
     }
 
 
@@ -50,13 +50,13 @@ public class ClienteController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deletePerson(@PathVariable Integer id){
+    public ResponseEntity<?> deletePerson(@PathVariable Long id){
         clientesCRUDservice.deletePerson(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ClienteResponse> uptadePerson(@RequestBody ClienteRequest person, @PathVariable Integer id){
+    public ResponseEntity<ClienteResponse> uptadePerson(@RequestBody ClienteRequest person, @PathVariable Long id){
 
         ModelMapper mapper = new ModelMapper();
         ClienteDTO dto = mapper.map(person, ClienteDTO.class);
