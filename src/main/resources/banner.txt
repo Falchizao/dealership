@@ -1,20 +1,20 @@
+${AnsiColor.CYAN} * **   ** ***  * *             * **   ** ***  * *              * **   ** ***  * * * **   ** ***  * *
+${AnsiColor.CYAN}* *  **   *    *   ***         * *  **   *    *   ***      * *  **   *    *   ***  * *  **   *    *   ***
+${AnsiColor.CYAN}                 *                 *                 *                 *                 *                 *
+${AnsiColor.CYAN} *       *      * * *       *      * * *       *      * * *       *      * * *       *      * * *       *      * *
+${AnsiColor.CYAN}                                *                               *                           *                 *
+${AnsiColor.CYAN}   * *    **  * *    **   * *    **    * *    **    * *    **  * *    **  * *    **     * *    **   * *    **
+${AnsiColor.CYAN}*                          *                           *                       *                       *
+${AnsiColor.CYAN}    *          * *    *          * *    *          * *    *          * *    *          * *    *          * *
+${AnsiColor.CYAN}      * *            *      * *            *      * *            *      * *            *      * *
+${AnsiColor.CYAN}
+${AnsiColor.CYAN}            *            *            *            *            *            *            *            *
+${AnsiColor.CYAN}  *          *     ** *          *     ** *          *     ** *          *     ** *          *     **
+${AnsiColor.GREEN}  Marcelo Falchi Navarro RA 2297787
 ${AnsiColor.MAGENTA}   ______                                                _                     __             _
 ${AnsiColor.MAGENTA}  / ____/  ____    ____   _____  ___    _____   _____   (_)  ____    ____   __/_/_   _____   (_)  ____ _
 ${AnsiColor.MAGENTA} / /      / __ \  / __ \ / ___/ / _ \  / ___/  / ___/  / /  / __ \  / __ \ / __ `/  / ___/  / /  / __ `/
 ${AnsiColor.MAGENTA}/ /___   / /_/ / / / / // /__  /  __/ (__  )  (__  )  / /  / /_/ / / / / // /_/ /  / /     / /  / /_/ /
 ${AnsiColor.MAGENTA}\____/   \____/ /_/ /_/ \___/  \___/ /____/  /____/  /_/   \____/ /_/ /_/ \__,_/  /_/     /_/   \__,_/
-${AnsiColor.GREEN}  Marcelo Falchi Navarro RA 2297787
-${AnsiColor.CYAN} * **   ** ***  * *
-${AnsiColor.CYAN}* *  **   *    *   ***
-${AnsiColor.CYAN}                 *
-${AnsiColor.CYAN} *       *      * *
-${AnsiColor.CYAN}
-${AnsiColor.CYAN}   * *    **
-${AnsiColor.CYAN}*
-${AnsiColor.CYAN}    *          * *
-${AnsiColor.CYAN}      * *            *
-${AnsiColor.CYAN}
-${AnsiColor.CYAN}            *
-${AnsiColor.CYAN}  *          *     **
 ${application.title} ${application.version}
 Powered by Spring Boot ${spring-boot.version}
