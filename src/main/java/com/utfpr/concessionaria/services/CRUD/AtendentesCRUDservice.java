@@ -3,6 +3,7 @@ package com.utfpr.concessionaria.services.CRUD;
 import com.utfpr.concessionaria.dto.AtendenteDTO;
 import com.utfpr.concessionaria.modelException.exception.ResourceNotFound;
 import com.utfpr.concessionaria.repositores.AtendenteRepository;
+import com.utfpr.concessionaria.repositores.ClienteRepository;
 import com.utfpr.concessionaria.view.entities.Atendente;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -16,8 +17,13 @@ import java.util.stream.Collectors;
 @Service @Slf4j
 public class AtendentesCRUDservice {
 
+    public AtendenteRepository atendenteRepository;
+
     @Autowired
-    private AtendenteRepository atendenteRepository;
+    public AtendentesCRUDservice(AtendenteRepository atendenteRepository) {
+        this.atendenteRepository = atendenteRepository;
+    }
+
 
     public List<AtendenteDTO> getAtendentes(){
         List<Atendente> atendentes = atendenteRepository.findAll();

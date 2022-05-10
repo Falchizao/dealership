@@ -4,6 +4,7 @@ import com.utfpr.concessionaria.dto.AtendenteDTO;
 import com.utfpr.concessionaria.dto.ClienteDTO;
 import com.utfpr.concessionaria.modelException.exception.ResourceNotFound;
 import com.utfpr.concessionaria.repositores.AtendenteRepository;
+import com.utfpr.concessionaria.repositores.CarroRepository;
 import com.utfpr.concessionaria.repositores.ClienteRepository;
 import com.utfpr.concessionaria.view.entities.Atendente;
 import com.utfpr.concessionaria.view.entities.Cliente;
@@ -19,8 +20,12 @@ import java.util.stream.Collectors;
 @Service @Slf4j
 public class ClientesCRUDservice {
 
+    public ClienteRepository clienteRepository;
+
     @Autowired
-    private ClienteRepository clienteRepository;
+    public ClientesCRUDservice(ClienteRepository clienteRepository) {
+        this.clienteRepository = clienteRepository;
+    }
 
     public List<ClienteDTO> getPersons(){
         List<Cliente> clientes = clienteRepository.findAll();

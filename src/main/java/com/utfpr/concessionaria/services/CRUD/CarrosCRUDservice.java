@@ -16,8 +16,12 @@ import java.util.stream.Collectors;
 @Service @Slf4j
 public class CarrosCRUDservice {
 
+    public CarroRepository carroRepository;
+
     @Autowired
-    private CarroRepository carroRepository;
+    public CarrosCRUDservice(CarroRepository carroRepository) {
+        this.carroRepository = carroRepository;
+    }
 
     public List<CarroDTO> getCars(){
         List<Carro> carros = carroRepository.findAll();
