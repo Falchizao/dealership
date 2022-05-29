@@ -36,7 +36,7 @@ public record DescontoService(VendaRepository vendaRepository, AtendentesCRUDser
 
         Double valorVenda = venda.getValorTotal();
 
-        if(this.tipoDescontoFuncionario(venda) != 0 && this.tipoDescontoFuncionario(venda) != 3){ //Plus Discount Worker
+        if(this.tipoDescontoFuncionario(venda) != 0 && this.tipoDescontoFuncionario(venda) != 3){ //Casa the worker has discount permission granted
             BigDecimal valueDiscount = setDesconto(venda);
             log.info("Valor do desconto: " + valueDiscount);
         }
@@ -66,7 +66,7 @@ public record DescontoService(VendaRepository vendaRepository, AtendentesCRUDser
             log.info("Seu desconto é de 15%");
         }
 
-        if(tipoDescontoFuncionario(venda) == 1){
+        if(tipoDescontoFuncionario(venda) == 1){ //Case the worker has fulldiscount permission
             //Desconto Adicional
             if(venda.getFormaPagamento().equals(TipoVenda.DINHEIRO)){ //Mais 10% de desconto
                 discount += discount - (valueVenda * discountDinheiro);
@@ -90,7 +90,7 @@ public record DescontoService(VendaRepository vendaRepository, AtendentesCRUDser
         return venda.getDesconto();
     }
 
-    public Integer tipoDescontoFuncionario(Venda venda) {
+    public Integer tipoDescontoFuncionario(Venda venda) { //Return the permission of the worker to apply discount
         PermissoesAtendente ps = atendentesCRUDservice.getPermissao(venda.getAtendente());
         switch(ps){
             case PERMITEDESCONTOCOMPLETO:
