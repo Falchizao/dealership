@@ -34,8 +34,6 @@ public record DescontoService(VendaRepository vendaRepository, AtendentesCRUDser
     public Venda inspecionaValorVenda(Venda venda) {
         log.info("Inspecionando valor da venda para atribuição de desconto");
 
-        Double valorVenda = venda.getValorTotal();
-
         if(this.tipoDescontoFuncionario(venda) != 0 && this.tipoDescontoFuncionario(venda) != 3){ //Casa the worker has discount permission granted
             BigDecimal valueDiscount = setDesconto(venda);
             log.info("Valor do desconto: " + valueDiscount);
@@ -92,15 +90,10 @@ public record DescontoService(VendaRepository vendaRepository, AtendentesCRUDser
 
     public Integer tipoDescontoFuncionario(Venda venda) { //Return the permission of the worker to apply discount
         PermissoesAtendente ps = atendentesCRUDservice.getPermissao(venda.getAtendente());
-        switch(ps){
-            case PERMITEDESCONTOCOMPLETO:
-                return 1;
-            case PERMITEDESCONTOPARCIAL:
-                return 2;
-            case SEMDESCONTO:
-                return 3;
-            default:
-                return 0;
-        }
+        return switch (ps) {
+            case PERMITEDESCONTOCOMPLETO -> 1;
+            case PERMITEDESCONTOPARCIAL -> 2;
+            case SEMDESCONTO -> 3;
+        };
     }
 }
