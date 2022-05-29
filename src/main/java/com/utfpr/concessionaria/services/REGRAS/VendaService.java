@@ -98,15 +98,20 @@ public class VendaService extends IService<VendaDTO>{
         }
 
         Venda venda = map.map(vendaDTO, Venda.class);
+
+        //Venda Config
         venda.setEmailCliente(cliente.get().getEmailCliente());
-        vendaDTO.setEmailCliente(cliente.get().getEmailCliente());
         venda.setIdCliente(vendaDTO.getIdCliente());
         venda.setCarro(vendaDTO.getIdCarro());
         venda.setValorTotal(carro.get().getValor());
         venda.setData_venda(new Date());
+
+        //Return DTO
+        vendaDTO.setEmailCliente(cliente.get().getEmailCliente());
         vendaDTO.setVenda(new Date());
         vendaDTO.setStatusVenda(PENDENTE);
 
+        //Payment Method
         if(vendaDTO.getFormaPagamento().equals("dinheiro")){
             venda.setFormaPagamento(TipoVenda.DINHEIRO);
         } else if (vendaDTO.getFormaPagamento().equals("debito")){
@@ -119,7 +124,10 @@ public class VendaService extends IService<VendaDTO>{
             venda.setFormaPagamento(null);
         }
 
+        //Set status venda
         venda.setStatusVenda(PENDENTE);
+
+        //Set total value
         vendaDTO.setValorTotal(carro.get().getValor());
 
         log.info("Salvando venda...");
@@ -128,7 +136,7 @@ public class VendaService extends IService<VendaDTO>{
         return vendaDTO;
     }
 
-    public Venda inserirDesconto(Venda venda){
+    public Venda inserirDesconto(Venda venda){ //Discount routine
         log.info("Enviando venda para calculo de desconto...");
         return descontoService.inspecionaValorVenda(venda);
     }

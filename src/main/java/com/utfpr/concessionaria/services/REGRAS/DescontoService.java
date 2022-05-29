@@ -17,85 +17,68 @@ public record DescontoService(VendaRepository vendaRepository, AtendentesCRUDser
 
     @Value("${desconto.condicao.um}")
     private static int conditionDiscount;
-
     @Value("${desconto.condicao.dois}")
     private static int conditionDiscountTwo;
-
     @Value("${desconto.condicao.tres}")
     private static int conditionDiscountThree;
-
     @Value("${desconto.parcelado}")
     private static int discountParcelado;
-
     @Value("${desconto.debito}")
     private static int discountDebito;
-
     @Value("${desconto.credito}")
     private static int disctountCredito;
-
     @Value("${desconto.dinheiro}")
     private static int discountDinheiro;
 
-
     //Aqui vão as regras de desconto da minha concessionaria em relação a descontos de venda
     public Venda inspecionaValorVenda(Venda venda) {
-
         log.info("Inspecionando valor da venda para atribuição de desconto");
 
         Double valorVenda = venda.getValorTotal();
-        if(valorVenda < 4000){
-            log.info("Valor da venda é menor que R$ 4000,00, sem desconto!");
-            return venda;
-        }
 
         if(this.tipoDescontoFuncionario(venda) != 0 && this.tipoDescontoFuncionario(venda) != 3){ //Plus Discount Worker
-            BigDecimal valueDiscount = calculaDesconto(venda, venda.getFormaPagamento());
+            BigDecimal valueDiscount = setDesconto(venda);
             log.info("Valor do desconto: " + valueDiscount);
         }
         return venda;
     }
 
-    public BigDecimal calculaDesconto(Venda venda, TipoVenda type) {
+    public BigDecimal setDesconto(Venda venda) {
 
-        Double ret ; //Return
+        Double discount ; //Discount
+        int discountPercentage = 0; //temp
         Double valueVenda = venda.getValorTotal();
 
         //Desconto Padrão
         if(valueVenda == null){
             throw new ErrorMessage("Valor da venda não pode ser nulo");
         }else if(valueVenda < conditionDiscount){ //2% de desconto
-            ret = (valueVenda * 0.02 );
-            return setDesconto(venda, ret);
+            log.info("Seu desconto é de 2%");
+            discount = (valueVenda * 0.02 );
         }else if(valueVenda >= conditionDiscount && valueVenda < conditionDiscountTwo) { //7% de desconto
-            ret = (valueVenda * 0.07 );
-            return setDesconto(venda, ret);
+            log.info("Seu desconto é de 7%");
+            discount = (valueVenda * 0.07 );
         }else if(valueVenda >= conditionDiscountTwo && valueVenda < conditionDiscountThree) { //10% de desconto
-            ret = (valueVenda * 0.10 );
-            return setDesconto(venda, ret);
+            log.info("Seu desconto é de 2%");
+            discount = (valueVenda * 0.10 );
         }else{
-            ret = (valueVenda * 0.15 ); //15% para acima de R$ 10.000,00
-            return setDesconto(venda, ret);
+            discount = (valueVenda * 0.15 ); //15% para acima de R$ 10.000,00
+            log.info("Seu desconto é de 15%");
         }
-    }
-
-    public BigDecimal setDesconto(Venda venda, Double discount) {
-        Double valueTotal = venda.getValorTotal();
-
-        int discountPercentage = 0; //temp
 
         if(tipoDescontoFuncionario(venda) == 1){
             //Desconto Adicional
             if(venda.getFormaPagamento().equals(TipoVenda.DINHEIRO)){ //Mais 10% de desconto
-                discount += discount - (valueTotal * discountDinheiro);
+                discount += discount - (valueVenda * discountDinheiro);
                 discountPercentage = 10;
             } else if(venda.getFormaPagamento().equals(TipoVenda.CARTAO_DEBITO)) { //Mais 5% de desconto
-                discount += (valueTotal * discountDebito);
+                discount += (valueVenda * discountDebito);
                 discountPercentage = 5;
             }else if(venda.getFormaPagamento().equals(TipoVenda.CARTAO_CREDITO)) { //Mais 6% de desconto
-                discount += (valueTotal * disctountCredito);
+                discount += (valueVenda * disctountCredito);
                 discountPercentage = 7;
             }else if(venda.getFormaPagamento().equals(TipoVenda.PARCELADO)) { //Mais 2% de desconto
-                discount += (valueTotal * discountParcelado);
+                discount += (valueVenda * discountParcelado);
                 discountPercentage = 2;
             }
             log.info("Seu método de pagamento permite mais " + discountPercentage+ "% de desconto!");
@@ -120,5 +103,4 @@ public record DescontoService(VendaRepository vendaRepository, AtendentesCRUDser
                 return 0;
         }
     }
-
 }
