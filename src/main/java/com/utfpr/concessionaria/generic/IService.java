@@ -1,12 +1,15 @@
 package com.utfpr.concessionaria.generic;
 
+import com.utfpr.concessionaria.dto.AtendenteDTO;
+
 import java.util.List;
 import java.util.Optional;
 
-public abstract class IService <T extends IModel, K, L, P>{
-     abstract List<K> getAll();
-     abstract Optional<K> getById(Long id);
-     abstract K add(T model);
-     abstract void delete(Long id);
-     abstract K update(K model, Long id);
+public abstract class IService <K>{
+
+     public abstract List<K> getAll();
+     public abstract Optional<K> getById(Long id);
+     public abstract K add(K model);
+     public abstract void delete(Long id);
+     public abstract K update(K model, Long id);
 }

@@ -1,5 +1,9 @@
-package com.utfpr.concessionaria.view.entities.enums;
+package com.utfpr.concessionaria.enums;
 
+import lombok.*;
+
+@Getter
+@ToString
 public enum StatusVenda {
     ABERTA,
     FECHADA,

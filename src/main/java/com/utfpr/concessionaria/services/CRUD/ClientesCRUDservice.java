@@ -2,6 +2,7 @@ package com.utfpr.concessionaria.services.CRUD;
 
 import com.utfpr.concessionaria.dto.AtendenteDTO;
 import com.utfpr.concessionaria.dto.ClienteDTO;
+import com.utfpr.concessionaria.generic.IService;
 import com.utfpr.concessionaria.modelException.exception.ResourceNotFound;
 import com.utfpr.concessionaria.repositores.AtendenteRepository;
 import com.utfpr.concessionaria.repositores.CarroRepository;
@@ -18,16 +19,16 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service @Slf4j
-public class ClientesCRUDservice {
+public class ClientesCRUDservice extends IService<ClienteDTO> {
 
-    public ClienteRepository clienteRepository;
+    private final ClienteRepository clienteRepository;
 
-    @Autowired
     public ClientesCRUDservice(ClienteRepository clienteRepository) {
         this.clienteRepository = clienteRepository;
     }
 
-    public List<ClienteDTO> getPersons(){
+    @Override
+    public List<ClienteDTO> getAll(){
         List<Cliente> clientes = clienteRepository.findAll();
 
         log.info("Consultando clientes...");
@@ -36,24 +37,30 @@ public class ClientesCRUDservice {
                 .collect(Collectors.toList());
     }
 
-    public Optional<ClienteDTO> getPersonById(Long id){
+    @Override
+    public Optional<ClienteDTO> getById(Long id){
         log.info("Consultando cliente desejado...");
         Optional<Cliente> person = clienteRepository.findById(id);
+        if(person.isEmpty()){ //If not found, we throw a exception
+            throw new ResourceNotFound("Cliente by id Not found in service!");
+        }
         ClienteDTO dto = new ModelMapper().map(person.get(), ClienteDTO.class);
         return Optional.of(dto);
     }
 
-    public ClienteDTO addPerson(ClienteDTO clienteDTO){
+    @Override
+    public ClienteDTO add(ClienteDTO clienteDTO){
         ModelMapper map = new ModelMapper();
         Cliente cliente = map.map(clienteDTO, Cliente.class);
         log.info("Salvando cliente...");
         clienteRepository.save(cliente);
-        clienteDTO.setIdCliente(cliente.getIdCliente());
+        //clienteDTO.setId(cliente.getId());
 
         return clienteDTO;
     }
 
-    public void deletePerson(Long id){
+    @Override
+    public void delete(Long id){
         Optional<Cliente> cliente = clienteRepository.findById(id);
 
         if(cliente.isEmpty()){
@@ -64,10 +71,11 @@ public class ClientesCRUDservice {
         clienteRepository.deleteById(id);
     }
 
-    public ClienteDTO uptadePerson(ClienteDTO clienteDTO, Long id){
-        clienteDTO.setIdCliente(id);
-        deletePerson(id);
+    @Override
+    public ClienteDTO update(ClienteDTO clienteDTO, Long id){
+        //clienteDTO.setId(id);
+        delete(id);
         log.info("Atualizando cliente...");
-        return addPerson(clienteDTO);
+        return add(clienteDTO);
     }
 }

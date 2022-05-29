@@ -1,9 +1,11 @@
 package com.utfpr.concessionaria.services.REGRAS;
 
+import com.utfpr.concessionaria.dto.AtendenteDTO;
 import com.utfpr.concessionaria.dto.CarroDTO;
 import com.utfpr.concessionaria.dto.ClienteDTO;
 import com.utfpr.concessionaria.dto.VendaDTO;
 import com.utfpr.concessionaria.enums.TipoVenda;
+import com.utfpr.concessionaria.generic.IService;
 import com.utfpr.concessionaria.modelException.exception.ResourceNotFound;
 import com.utfpr.concessionaria.repositores.VendaRepository;
 import com.utfpr.concessionaria.services.CRUD.CarrosCRUDservice;
@@ -24,9 +26,22 @@ import static com.utfpr.concessionaria.enums.StatusVenda.PENDENTE;
 
 @Service
 @Slf4j
-public record VendaService(DescontoService descontoService, VendaRepository vendaRepository, ClientesCRUDservice clienteservice, CarrosCRUDservice carroService) {
+public class VendaService extends IService<VendaDTO>{
 
-    public List<VendaDTO> getVendas(){
+    private final DescontoService descontoService;
+    private final VendaRepository vendaRepository;
+    private final ClientesCRUDservice clienteservice;
+    private final CarrosCRUDservice carroService;
+
+    public VendaService(DescontoService descontoService, VendaRepository vendaRepository, ClientesCRUDservice clienteservice, CarrosCRUDservice carroService) {
+        this.descontoService = descontoService;
+        this.vendaRepository = vendaRepository;
+        this.clienteservice = clienteservice;
+        this.carroService = carroService;
+    }
+
+    @Override
+    public List<VendaDTO> getAll(){
         List<Venda> vendas = vendaRepository.findAll();
 
         log.info("Consultando vendas...");
@@ -35,7 +50,8 @@ public record VendaService(DescontoService descontoService, VendaRepository vend
                 .collect(Collectors.toList());
     }
 
-    public Optional<VendaDTO> getVendaById(Long id){
+    @Override
+    public Optional<VendaDTO> getById(Long id){
         log.info("Consultando venda desejada...");
         Optional<Venda> venda = vendaRepository.findById(id);
         if(venda.isEmpty()){ //If not found, we throw a exception
@@ -45,7 +61,8 @@ public record VendaService(DescontoService descontoService, VendaRepository vend
         return Optional.of(dto);
     }
 
-    public void deleteVenda(Long id){
+    @Override
+    public void delete(Long id){
         Optional<Venda> venda = vendaRepository.findById(id);
 
         if(venda.isEmpty()){
@@ -56,18 +73,20 @@ public record VendaService(DescontoService descontoService, VendaRepository vend
         vendaRepository.deleteById(id);
     }
 
-    public VendaDTO updateVenda(VendaDTO vendaDTO, Long id){
+    @Override
+    public VendaDTO update(VendaDTO vendaDTO, Long id){
         //vendaDTO.setId(id);
-        deleteVenda(id);
+        delete(id);
         log.info("Atualizando venda...");
-        return addVenda(vendaDTO);
+        return add(vendaDTO);
     }
 
-    public VendaDTO addVenda(VendaDTO vendaDTO){
+    @Override
+    public VendaDTO add(VendaDTO vendaDTO){
         ModelMapper map = new ModelMapper();
 
-        Optional<ClienteDTO> cliente = clienteservice.getPersonById(vendaDTO.getIdCliente());
-        Optional<CarroDTO> carro = carroService.getCarById(vendaDTO.getIdCarro());
+        Optional<ClienteDTO> cliente = clienteservice.getById(vendaDTO.getIdCliente());
+        Optional<CarroDTO> carro = carroService.getById(vendaDTO.getIdCarro());
 
         log.info("Carro selecionado" + carro.get().getMarca());
 

@@ -6,13 +6,9 @@ import javax.persistence.Column;
 
 @Getter
 @Setter
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-@ToString
 public class ClienteRequest {
 
-    private Long idCliente;
+
     private String nomeCliente;
     private String cpfCliente;
     private String rgCliente;

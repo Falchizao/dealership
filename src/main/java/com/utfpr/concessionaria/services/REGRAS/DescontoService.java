@@ -37,7 +37,6 @@ public record DescontoService(VendaRepository vendaRepository, AtendentesCRUDser
     private static int discountDinheiro;
 
 
-
     //Aqui vão as regras de desconto da minha concessionaria em relação a descontos de venda
     public Venda inspecionaValorVenda(Venda venda) {
 
@@ -48,11 +47,11 @@ public record DescontoService(VendaRepository vendaRepository, AtendentesCRUDser
             log.info("Valor da venda é menor que R$ 4000,00, sem desconto!");
             return venda;
         }
-        if(this.tipoDescontoFuncionario(venda) != 0 && this.tipoDescontoFuncionario(venda) != 3){
+
+        if(this.tipoDescontoFuncionario(venda) != 0 && this.tipoDescontoFuncionario(venda) != 3){ //Plus Discount Worker
             BigDecimal valueDiscount = calculaDesconto(venda, venda.getFormaPagamento());
             log.info("Valor do desconto: " + valueDiscount);
         }
-
         return venda;
     }
 

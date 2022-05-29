@@ -1,5 +1,7 @@
 package com.utfpr.concessionaria.view.entities;
 
+import com.utfpr.concessionaria.generic.IModel;
+import com.utfpr.concessionaria.enums.PermissoesAtendente;
 import lombok.*;
 
 import javax.persistence.*;
@@ -12,17 +14,16 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class Atendente {
+public class Atendente extends IModel {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_atendente")
-    public Long idAtendente;
 
     @Column(name = "nome_atendente", length = 255, nullable = false)
     private String nomeAtendente;
 
+    @Column(name = "permissao", length = 255)
+    private PermissoesAtendente permissao;
 
-
+    @Column(name = "senha", length = 255)
+    private String senha;
 
 }

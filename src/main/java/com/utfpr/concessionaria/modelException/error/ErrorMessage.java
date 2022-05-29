@@ -1,44 +1,13 @@
 package com.utfpr.concessionaria.modelException.error;
 
-public class ErrorMessage {
-    //#region atributes
-    private String message;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
-    private String title;
+@ResponseStatus(code = HttpStatus.BAD_REQUEST)
+public class ErrorMessage extends RuntimeException {
 
-    private Integer status;
-    //#endregion
 
-    //#region GettersAndSetters
-    public String getMessage() {
-        return message;
+    public ErrorMessage(String message){
+        super(message);
     }
-
-    public ErrorMessage(String message, String title, Integer status) {
-        this.message = message;
-        this.title = title;
-        this.status = status;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public Integer getStatus() {
-        return status;
-    }
-
-    public void setStatus(Integer status) {
-        this.status = status;
-    }
-    //#endregion
-
 }

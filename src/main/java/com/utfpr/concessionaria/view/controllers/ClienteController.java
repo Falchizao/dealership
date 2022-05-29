@@ -1,7 +1,11 @@
 package com.utfpr.concessionaria.view.controllers;
 
 import com.utfpr.concessionaria.dto.ClienteDTO;
-import com.utfpr.concessionaria.services.ClientesCRUDservice;
+import com.utfpr.concessionaria.generic.IController;
+import com.utfpr.concessionaria.services.CRUD.AtendentesCRUDservice;
+import com.utfpr.concessionaria.services.CRUD.ClientesCRUDservice;
+import com.utfpr.concessionaria.view.entities.reqresDomain.AtendenteRequest;
+import com.utfpr.concessionaria.view.entities.reqresDomain.AtendenteResponse;
 import com.utfpr.concessionaria.view.entities.reqresDomain.ClienteRequest;
 import com.utfpr.concessionaria.view.entities.reqresDomain.ClienteResponse;
 import org.modelmapper.ModelMapper;
@@ -16,53 +20,47 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/clientes")
-public class ClienteController {
+public class ClienteController extends IController<ClienteResponse, ResponseEntity<?>, ClienteRequest> {
 
-//     Here goes the service that will be used to get the data from the database about the clients
-    @Autowired
-    public ClientesCRUDservice clientesCRUDservice;
+    private final ClientesCRUDservice clientesCRUDservice;
 
-    @GetMapping
-    public ResponseEntity<List<ClienteResponse>> getPersons(){
-        List<ClienteDTO> personDTOs = clientesCRUDservice.getPersons();
+    public ClienteController(ClientesCRUDservice clientesCRUDservice) {
+        this.clientesCRUDservice = clientesCRUDservice;
+    }
+
+    @Override
+    public ResponseEntity<List<ClienteResponse>> getAll(){
+        List<ClienteDTO> personDTOs = clientesCRUDservice.getAll();
         return new ResponseEntity<>(personDTOs.stream().map(personDTO -> new ModelMapper().map(personDTO, ClienteResponse.class)).collect(Collectors.toList()), HttpStatus.OK);
     }
 
-
-    @GetMapping("/{id}")
-    public ResponseEntity<Optional<ClienteResponse>> getPersonById(@PathVariable Long id){
-
-        Optional<ClienteDTO> dto = clientesCRUDservice.getPersonById(id);
+    @Override
+    public ResponseEntity<Optional<ClienteResponse>> getById(@PathVariable Long id){
+        Optional<ClienteDTO> dto = clientesCRUDservice.getById(id);
         ModelMapper map = new ModelMapper();
         ClienteResponse person = map.map(dto, ClienteResponse.class);
-
         return new ResponseEntity<>(Optional.of(person), HttpStatus.OK);
     }
 
-
-    @PostMapping("/registrar")
-    public ResponseEntity<ClienteResponse> addPerson(@RequestBody ClienteRequest personReq){
+    @Override
+    public ResponseEntity<ClienteResponse> add(@RequestBody ClienteRequest personReq){
         ModelMapper mapper = new ModelMapper();
         ClienteDTO dto = mapper.map(personReq, ClienteDTO.class);
-        dto = clientesCRUDservice.addPerson(dto);
-
+        dto = clientesCRUDservice.add(dto);
         return new ResponseEntity<>(mapper.map(dto, ClienteResponse.class), HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deletePerson(@PathVariable Long id){
-        clientesCRUDservice.deletePerson(id);
+    @Override
+    public ResponseEntity<?> delete(@PathVariable Long id){
+        clientesCRUDservice.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<ClienteResponse> uptadePerson(@RequestBody ClienteRequest person, @PathVariable Long id){
-
+    @Override
+    public ResponseEntity<ClienteResponse> update(@RequestBody ClienteRequest person, @PathVariable Long id){
         ModelMapper mapper = new ModelMapper();
         ClienteDTO dto = mapper.map(person, ClienteDTO.class);
-        dto = clientesCRUDservice.uptadePerson(dto, id);
-
+        dto = clientesCRUDservice.update(dto, id);
         return new ResponseEntity<>(mapper.map(dto, ClienteResponse.class), HttpStatus.OK);
     }
-
 }

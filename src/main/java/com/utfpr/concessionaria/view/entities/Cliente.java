@@ -1,5 +1,6 @@
 package com.utfpr.concessionaria.view.entities;
 
+import com.utfpr.concessionaria.generic.IModel;
 import lombok.*;
 
 import javax.persistence.*;
@@ -11,13 +12,10 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class Cliente {
+public class Cliente extends IModel {
     // Atributos
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_cliente")
-    private Long idCliente;
+
 
     @Column(name = "nome_cliente", length = 255, nullable = false)
     private String nomeCliente;

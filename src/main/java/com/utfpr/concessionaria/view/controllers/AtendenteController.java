@@ -1,72 +1,61 @@
 package com.utfpr.concessionaria.view.controllers;
 
-
-
 import com.utfpr.concessionaria.dto.AtendenteDTO;
-import com.utfpr.concessionaria.services.AtendentesCRUDservice;
+import com.utfpr.concessionaria.generic.IController;
+import com.utfpr.concessionaria.services.CRUD.AtendentesCRUDservice;
 import com.utfpr.concessionaria.view.entities.reqresDomain.AtendenteRequest;
 import com.utfpr.concessionaria.view.entities.reqresDomain.AtendenteResponse;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/atendentes")
-public class AtendenteController {
+public class AtendenteController extends IController<AtendenteResponse, ResponseEntity<?>, AtendenteRequest> {
 
-//Here goes the service to get the atendentes
-    @Autowired
-    public AtendentesCRUDservice atendenteService;
+    private final AtendentesCRUDservice atendenteService;
 
-    @GetMapping
-    public ResponseEntity<List<AtendenteResponse>> getAtendentes(){
-        List<AtendenteDTO> atendentesDTOs = atendenteService.getAtendentes();
+    public AtendenteController(AtendentesCRUDservice atendenteService) {
+        this.atendenteService = atendenteService;
+    }
+
+    @Override
+    public ResponseEntity<List<AtendenteResponse>> getAll(){
+        List<AtendenteDTO> atendentesDTOs = atendenteService.getAll();
         return new ResponseEntity<>(atendentesDTOs.stream().map(atendenteDTO -> new ModelMapper().map(atendenteDTO, AtendenteResponse.class)).collect(Collectors.toList()), HttpStatus.OK);
     }
 
-
-    @GetMapping("/{id}")
-    public ResponseEntity<Optional<AtendenteResponse>> getAtendente(@PathVariable Long id){
-
-        Optional<AtendenteDTO> dto = atendenteService.getAtendenteById(id);
+    @Override
+    public ResponseEntity<Optional<AtendenteResponse>> getById(@PathVariable Long id){
+        Optional<AtendenteDTO> dto = atendenteService.getById(id);
         ModelMapper map = new ModelMapper();
         AtendenteResponse atendente = map.map(dto, AtendenteResponse.class);
-
         return new ResponseEntity<>(Optional.of(atendente), HttpStatus.OK);
     }
 
-
-    @PostMapping("/registrar")
-    public ResponseEntity<AtendenteResponse> addAtendente(@RequestBody AtendenteRequest atendenteReq){
+    @Override
+    public ResponseEntity<AtendenteResponse> add(@RequestBody AtendenteRequest atendenteReq){
         ModelMapper mapper = new ModelMapper();
         AtendenteDTO dto = mapper.map(atendenteReq, AtendenteDTO.class);
-        dto = atendenteService.addAtendente(dto);
-
+        dto = atendenteService.add(dto);
         return new ResponseEntity<>(mapper.map(dto, AtendenteResponse.class), HttpStatus.CREATED);
     }
 
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteAtendente(@PathVariable Long id){
-        atendenteService.deleteAtendente(id);
+    @Override
+    public ResponseEntity<?> delete(@PathVariable Long id){
+        atendenteService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-
-    @PutMapping("/{id}")
-    public ResponseEntity<AtendenteResponse> uptadeAtendente(@RequestBody AtendenteRequest atendente, @PathVariable Long id){
-
+    @Override
+    public ResponseEntity<AtendenteResponse> update(@RequestBody AtendenteRequest atendente, @PathVariable Long id){
         ModelMapper mapper = new ModelMapper();
         AtendenteDTO dto = mapper.map(atendente, AtendenteDTO.class);
-        dto = atendenteService.uptadeAtendente(dto, id);
-
+        dto = atendenteService.update(dto, id);
         return new ResponseEntity<>(mapper.map(dto, AtendenteResponse.class), HttpStatus.OK);
     }
-
 }
