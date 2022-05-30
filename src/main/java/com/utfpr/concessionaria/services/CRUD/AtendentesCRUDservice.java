@@ -14,6 +14,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static com.utfpr.concessionaria.enums.PermissoesAtendente.*;
+
 @Service @Slf4j
 public class AtendentesCRUDservice extends IService<AtendenteDTO> {
 
@@ -49,6 +51,13 @@ public class AtendentesCRUDservice extends IService<AtendenteDTO> {
     public AtendenteDTO add(AtendenteDTO atendenteDTO){
         ModelMapper map = new ModelMapper();
         Atendente atendente = map.map(atendenteDTO, Atendente.class);
+
+        switch(atendenteDTO.getPermissao()){
+            case 0 -> atendente.setPermissao(SEMDESCONTO);
+            case 1 -> atendente.setPermissao(PERMITEDESCONTOCOMPLETO);
+            case 2 -> atendente.setPermissao(PERMITEDESCONTOPARCIAL);
+        }
+
         log.info("Adicionando atendente...");
         atendenteRepository.save(atendente);
         //atendenteDTO.setId(atendente.getId());

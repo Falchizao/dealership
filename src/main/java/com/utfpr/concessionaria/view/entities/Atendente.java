@@ -15,8 +15,6 @@ import javax.persistence.*;
 @AllArgsConstructor
 @ToString
 public class Atendente extends IModel {
-
-
     @Column(name = "nome_atendente", length = 255, nullable = false)
     private String nomeAtendente;
 

@@ -13,6 +13,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static com.utfpr.concessionaria.enums.PermissoesAtendente.*;
+
 @RestController
 @RequestMapping("/api/atendentes")
 public class AtendenteController extends IController<AtendenteResponse, ResponseEntity<?>, AtendenteRequest> {
@@ -42,7 +44,17 @@ public class AtendenteController extends IController<AtendenteResponse, Response
         ModelMapper mapper = new ModelMapper();
         AtendenteDTO dto = mapper.map(atendenteReq, AtendenteDTO.class);
         dto = atendenteService.add(dto);
-        return new ResponseEntity<>(mapper.map(dto, AtendenteResponse.class), HttpStatus.CREATED);
+
+        AtendenteResponse at = mapper.map(dto, AtendenteResponse.class);
+
+        switch(dto.getPermissao()){
+            case 0 -> at.setPermissoesAtendente(SEMDESCONTO);
+            case 1 -> at.setPermissoesAtendente(PERMITEDESCONTOCOMPLETO);
+            case 2 -> at.setPermissoesAtendente(PERMITEDESCONTOPARCIAL);
+        }
+
+        return new ResponseEntity<>(at, HttpStatus.CREATED);
+
     }
 
     @Override
