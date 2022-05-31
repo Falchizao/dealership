@@ -9,18 +9,35 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Set;
 
-@Getter
-@Setter
+@Builder
 public class VendaResponse {
 
-
+    @Getter
+    @Setter
     private Long idCliente;
+
+    @Getter
+    @Setter
     private Long idCarro;
+
+    @Getter
+    @Setter
     private Long atendente;
+
+    @Getter
+    @Setter
     private Date venda;
-    private String formaPagamento;
+
+    @Getter
+    @Setter
     private StatusVenda statusVenda;
-    private BigDecimal valorTotal;
+
+    @Getter
+    @Setter
+    private Long idPagamento;
+
+    @Getter
+    @Setter
     private String emailCliente;
 
 }

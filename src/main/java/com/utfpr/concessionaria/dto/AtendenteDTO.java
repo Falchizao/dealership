@@ -6,14 +6,20 @@ import lombok.*;
 
 import javax.persistence.Column;
 
-@Getter
-@Setter
+
+@Builder
 public class AtendenteDTO extends IModel {
 
     //Atributos Atendente
 
+    @Getter
+    @Setter
     private String nomeAtendente;
+
+    @Getter
+    @Setter
     private Integer permissao;
+
 
 
 }

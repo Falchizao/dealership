@@ -3,11 +3,15 @@ package com.utfpr.concessionaria.view.entities.reqresDomain;
 import com.utfpr.concessionaria.enums.PermissoesAtendente;
 import lombok.*;
 
-@Getter
-@Setter
+
 public class AtendenteRequest {
 
+    @Getter
+    @Setter
     private String nomeAtendente;
+
+    @Getter
+    @Setter
     private Integer permissao;
 
 }

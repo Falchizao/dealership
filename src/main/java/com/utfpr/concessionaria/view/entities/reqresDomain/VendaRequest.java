@@ -12,10 +12,8 @@ import java.util.Set;
 @Getter
 @Setter
 public class VendaRequest {
-
-
     private Long idCliente;
     private Long idCarro;
     private Long atendente;
-    private String formaPagamento;
+    private Integer formaPagamento;
 }

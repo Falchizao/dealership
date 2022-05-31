@@ -18,7 +18,6 @@ import java.util.Date;
 @ToString
 public class Venda extends IModel {
 
-
     @Column(name = "id_cliente")
     private Long idCliente;
 
@@ -31,23 +30,13 @@ public class Venda extends IModel {
     @Column(name = "dt_venda")
     private Date data_venda;
 
-    @Column(name = "forma_pagamento")
-    private TipoVenda formaPagamento;
-
     @Column(name = "status_venda")
     private StatusVenda statusVenda;
-
-    @Column(name = "valor_total")
-    private Double valorTotal;
 
     @Column(name = "email_cliente")
     private String emailCliente;
 
-    @Column(name = "desconto")
-    private BigDecimal desconto;
-
-    @Column(name = "valor_final")
-    private BigDecimal valorFinal;
-
+    @Column(name = "id_pagamento")
+    private Long idPagamento;
 
 }

@@ -2,11 +2,16 @@ package com.utfpr.concessionaria.view.entities.reqresDomain;
 import com.utfpr.concessionaria.enums.PermissoesAtendente;
 import lombok.*;
 
-@Getter
-@Setter
+
+@Builder
 public class AtendenteResponse {
 
+    @Getter
+    @Setter
     private String nomeAtendente;
-    private PermissoesAtendente permissoesAtendente;
+
+    @Getter
+    @Setter
+    private Integer permissoesAtendente;
 
 }
