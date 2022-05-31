@@ -1,15 +1,15 @@
-${AnsiColor.CYAN} * **   ** ***  * *             * **   ** ***  * *              * **   ** ***  * * * **   ** ***  * *
-${AnsiColor.CYAN}* *  **   *    *   ***         * *  **   *    *   ***      * *  **   *    *   ***  * *  **   *    *   ***
-${AnsiColor.CYAN}                 *                 *                 *                 *                 *                 *
-${AnsiColor.CYAN} *       *      * * *       *      * * *       *      * * *       *      * * *       *      * * *       *      * *
-${AnsiColor.CYAN}                                *                               *                           *                 *
-${AnsiColor.CYAN}   * *    **  * *    **   * *    **    * *    **    * *    **  * *    **  * *    **     * *    **   * *    **
-${AnsiColor.CYAN}*                          *                           *                       *                       *
-${AnsiColor.CYAN}    *          * *    *          * *    *          * *    *          * *    *          * *    *          * *
-${AnsiColor.CYAN}      * *            *      * *            *      * *            *      * *            *      * *
-${AnsiColor.CYAN}
-${AnsiColor.CYAN}            *            *            *            *            *            *            *            *
-${AnsiColor.CYAN}  *          *     ** *          *     ** *          *     ** *          *     ** *          *     **
+${AnsiColor.YELLOW} * **   ** ***  * *             * **   ** ***  * *              * **   ** ***  * * * **   ** ***  * *
+${AnsiColor.YELLOW}* *  **   *    *   ***         * *  **   *    *   ***      * *  **   *    *   ***  * *  **   *    *   ***
+${AnsiColor.YELLOW}                 *                 *                 *                 *                 *                 *
+${AnsiColor.YELLOW} *       *      * * *       *      * * *       *      * * *       *      * * *       *      * * *       *      * *
+${AnsiColor.YELLOW}                                *                               *                           *                 *
+${AnsiColor.YELLOW}   * *    **  * *    **   * *    **    * *    **    * *    **  * *    **  * *    **     * *    **   * *    **
+${AnsiColor.YELLOW}*                          *                           *                       *                       *
+${AnsiColor.YELLOW}    *          * *    *          * *    *          * *    *          * *    *          * *    *          * *
+${AnsiColor.YELLOW}      * *            *      * *            *      * *            *      * *            *      * *
+${AnsiColor.YELLOW}
+${AnsiColor.YELLOW}            *            *            *            *            *            *            *            *
+${AnsiColor.YELLOW}  *          *     ** *          *     ** *          *     ** *          *     ** *          *     **
 ${AnsiColor.GREEN}  Marcelo Falchi Navarro RA 2297787
 ${AnsiColor.MAGENTA}   ______                                                _                     __             _
 ${AnsiColor.MAGENTA}  / ____/  ____    ____   _____  ___    _____   _____   (_)  ____    ____   __/_/_   _____   (_)  ____ _
