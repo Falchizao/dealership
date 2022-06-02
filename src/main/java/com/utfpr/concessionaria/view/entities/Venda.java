@@ -10,32 +10,44 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 @Entity(name = "tb_venda")
-@Getter
-@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
 public class Venda extends IModel {
 
+    @Getter
+    @Setter
     @Column(name = "id_cliente")
     private Long idCliente;
 
+    @Getter
+    @Setter
     @Column(name = "id_carro")
     private Long carro;
 
+    @Getter
+    @Setter
     @Column(name = "id_funcionario")
     private Long atendente;
 
+    @Getter
+    @Setter
     @Column(name = "dt_venda")
     private Date data_venda;
 
+    @Getter
+    @Setter
     @Column(name = "status_venda")
     private StatusVenda statusVenda;
 
+    @Getter
+    @Setter
     @Column(name = "email_cliente")
     private String emailCliente;
 
+    @Getter
+    @Setter
     @Column(name = "id_pagamento")
     private Long idPagamento;
 

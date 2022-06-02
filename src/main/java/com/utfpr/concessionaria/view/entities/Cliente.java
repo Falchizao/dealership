@@ -6,8 +6,6 @@ import lombok.*;
 import javax.persistence.*;
 
 @Entity(name = "tb_cliente")
-@Getter
-@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -15,23 +13,33 @@ import javax.persistence.*;
 public class Cliente extends IModel {
     // Atributos
 
-
-
+    @Getter
+    @Setter
     @Column(name = "nome_cliente", length = 255, nullable = false)
     private String nomeCliente;
 
+    @Getter
+    @Setter
     @Column(name = "cpf_cliente", length = 14, nullable = false)
     private String cpfCliente;
 
+    @Getter
+    @Setter
     @Column(name = "rg_cliente", length = 12, nullable = false)
     private String rgCliente;
 
+    @Getter
+    @Setter
     @Column(name = "endereco_cliente", length = 255, nullable = false)
     private String enderecoCliente;
 
+    @Getter
+    @Setter
     @Column(name = "telefone_cliente", length = 15, nullable = false)
     private String telefoneCliente;
 
+    @Getter
+    @Setter
     @Column(name = "email_cliente", length = 255, nullable = false)
     private String emailCliente;
 

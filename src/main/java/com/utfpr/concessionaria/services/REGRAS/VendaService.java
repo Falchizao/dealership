@@ -109,7 +109,7 @@ public class VendaService extends IService<VendaDTO>{
             throw new ResourceNotFound("Car by id Not found in venda service!");
         }
 
-        log.info("Carro selecionado" + carro.get().getMarca());
+        log.info("Carro selecionado: {}",  carro.get().getMarca());
 
         Venda venda = Venda.builder() //Entitie builder for save
                 .idCliente(vendaDTO.getIdCliente())
@@ -137,7 +137,7 @@ public class VendaService extends IService<VendaDTO>{
 
     public Venda getPaymentInfo(Venda venda, Integer paymentMethod){ //Informações sobre o pagamento da venda
         log.info("Enviando venda para calculo de desconto...");
-        return descontoService.inspecionaValorVenda(venda, paymentMethod);
+        return descontoService.manipulaValorDescontoVenda(venda, paymentMethod);
     }
 
 
