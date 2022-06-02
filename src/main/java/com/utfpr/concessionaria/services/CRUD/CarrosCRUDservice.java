@@ -1,17 +1,12 @@
 package com.utfpr.concessionaria.services.CRUD;
 
-import com.utfpr.concessionaria.dto.AtendenteDTO;
 import com.utfpr.concessionaria.dto.CarroDTO;
-import com.utfpr.concessionaria.dto.VendaDTO;
 import com.utfpr.concessionaria.generic.IService;
 import com.utfpr.concessionaria.modelException.exception.ResourceNotFound;
-import com.utfpr.concessionaria.repositores.AtendenteRepository;
 import com.utfpr.concessionaria.repositores.CarroRepository;
 import com.utfpr.concessionaria.view.entities.Carro;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
