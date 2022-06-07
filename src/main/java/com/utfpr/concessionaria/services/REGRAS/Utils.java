@@ -7,6 +7,7 @@ import com.utfpr.concessionaria.view.entities.Venda;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Calendar;
 import static com.utfpr.concessionaria.enums.TipoVenda.*;
 
@@ -31,6 +32,7 @@ public record Utils(AtendentesCRUDservice atendentesCRUDservice) { //Service to 
             case 1 -> PARCELADO;
             case 2 -> CARTAO_CREDITO;
             case 3 -> CARTAO_DEBITO;
+            default -> null;
         };
     }
 
@@ -38,12 +40,16 @@ public record Utils(AtendentesCRUDservice atendentesCRUDservice) { //Service to 
     public BigDecimal getvalorentrada(BigDecimal saleValue, Double percentage){
         return saleValue.multiply(BigDecimal.valueOf(percentage));
     }
-    // valorTotal.divide(BigDecimal.valueOf(PARCELASPRAZO), RoundingMode.HALF_UP);
 
+    public void imprimeInfo(int numeroParcela, int totalParcelas, BigDecimal valorEmCentavos, Calendar data) {
+        log.info("Informação de venda: %02d/%02d\t%td/%tm/%ty\tR$ %.2f%n", numeroParcela,
+                totalParcelas, data, data, data, valorEmCentavos);
+    }
 
-    public void imprimeInfo(int numeroParcela, int totalParcelas, int valorEmCentavos, Calendar data) {
-        log.info("%02d/%02d\t%td/%tm/%ty\tR$ %.2f%n", numeroParcela,
-                totalParcelas, data, data, data, valorEmCentavos / 100.0);
+    public BigDecimal calculaValorParcela(BigDecimal juros, int numeroParcelas, BigDecimal valorParcelado) {
+        BigDecimal potencia = juros.add(BigDecimal.ONE).pow(numeroParcelas);
+        BigDecimal denominador = BigDecimal.ONE.subtract(BigDecimal.ONE.divide(potencia, 20, RoundingMode.HALF_EVEN));
+        return valorParcelado.multiply(juros).divide(denominador, 2, RoundingMode.HALF_EVEN);
     }
 
 }
