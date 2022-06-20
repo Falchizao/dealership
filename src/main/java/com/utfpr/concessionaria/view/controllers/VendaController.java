@@ -70,6 +70,7 @@ public class VendaController extends IController<VendaResponse, ResponseEntity<?
                 .idPagamento(dto.getIdPagamento())
                 .emailCliente(dto.getEmailCliente())
                 .statusVenda(dto.getStatusVenda())
+                .dtaVenda(dto.getData_venda())
                 .build();
 
         return new ResponseEntity<>(vendaRes, HttpStatus.OK);

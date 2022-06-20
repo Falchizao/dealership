@@ -22,7 +22,7 @@ public class FormaPagamento extends IModel {
 
     @Getter
     @Setter
-    @Column(name = "valor_total")
+    @Column(name = "valor_inicial")
     private BigDecimal valorTotal;
 
     @Getter
@@ -52,7 +52,7 @@ public class FormaPagamento extends IModel {
 
     @Getter
     @Setter
-    @Column(name = "valor_final_desconto")
+    @Column(name = "valor_final")
     private BigDecimal valorFinal;
 
     @Setter

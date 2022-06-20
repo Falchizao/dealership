@@ -26,7 +26,7 @@ public class VendaResponse {
 
     @Getter
     @Setter
-    private Date venda;
+    private Date dtaVenda;
 
     @Getter
     @Setter

@@ -35,4 +35,8 @@ public class CarroRequest {
     @Getter
     @Setter
     private Double valor;
+
+    @Getter
+    @Setter
+    private Integer quantity;
 }

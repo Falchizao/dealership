@@ -11,7 +11,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface CarroRepository extends IRepository<Carro>{
 
-    Carro findByplaca(String placa);
 
-    Carro findBychassi(String chassi);
 }

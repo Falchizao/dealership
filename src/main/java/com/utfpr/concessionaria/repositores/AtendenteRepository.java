@@ -9,4 +9,5 @@ import org.springframework.stereotype.Repository;
 public interface AtendenteRepository extends IRepository<Atendente> {
 
     Atendente findBynomeAtendente(String nomeAtendente);
+
 }

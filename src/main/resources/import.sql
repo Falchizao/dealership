@@ -9,8 +9,3 @@ INSERT INTO tb_cliente(id,nome_cliente,cpf_cliente,rg_cliente,endereco_cliente,t
 INSERT INTO tb_cliente(id,nome_cliente,cpf_cliente,rg_cliente,endereco_cliente,telefone_cliente, email_cliente) VALUES (4,'Zezinho','543256384534','767543442','R. Salles 533', '975438-8364', 'zezinho@Alunos.utfpr.edu.br');
 INSERT INTO tb_cliente(id,nome_cliente,cpf_cliente,rg_cliente,endereco_cliente,telefone_cliente, email_cliente) VALUES (5,'Joaozinho','245678987678','325434456','R. Uniao 352', '945332-4654', 'joaozinho@Alunos.utfpr.edu.br');
 INSERT INTO tb_cliente(id,nome_cliente,cpf_cliente,rg_cliente,endereco_cliente,telefone_cliente, email_cliente) VALUES (6,'Ronaldinho','678954323456','765433456','R. Yariwsky 623', '921345-8632', 'ronaldinho@Alunos.utfpr.edu.br');
-INSERT INTO tb_carro(id,modelo_carro,marca_carro,cor_carro,data_carro,placa_carro,chassi_carro,valor_carro) VALUES (1,'Sedan','Ford','Cinza','2018-01-01','ABC1234','123456789012345', 30000.00);
-INSERT INTO tb_carro(id,modelo_carro,marca_carro,cor_carro,data_carro,placa_carro,chassi_carro,valor_carro) VALUES (2,'Eletrico','Tesla','Preto','2020-01-01','ABC1235','123456789012346', 40000.00);
-INSERT INTO tb_carro(id,modelo_carro,marca_carro,cor_carro,data_carro,placa_carro,chassi_carro,valor_carro) VALUES (3,'Conversivel','Ferrari','Vermelho','2014-01-01','ABC1236','123456789012347', 50000.00);
-INSERT INTO tb_carro(id,modelo_carro,marca_carro,cor_carro,data_carro,placa_carro,chassi_carro,valor_carro) VALUES (4,'Fusca','Volkswagen','Azul','1960-01-01','ABC1237','123456789012348', 60000.00);
-INSERT INTO tb_carro(id,modelo_carro,marca_carro,cor_carro,data_carro,placa_carro,chassi_carro,valor_carro) VALUES (5,'Gol Bolinha','Volkswagen','Verde','1990-01-01','ABC1264','123442789012348', 70000.00);

@@ -23,6 +23,10 @@ public class Carro extends IModel {
     @Column(name = "marca_carro", length = 255)
     private String marca;
 
+    @JoinColumn(name = "item_catalogo", nullable = false, foreignKey = @ForeignKey(name = "fk_carro_itemcatalogo"))
+    @OneToOne(optional = false)
+    private ItemCatalogo itemCatalogo;
+
     @Getter
     @Setter
     @Column(name = "cor_carro", length = 255)
@@ -47,7 +51,4 @@ public class Carro extends IModel {
     @Setter
     @Column(name = "valor_carro")
     private Double valor;
-
-
-
 }
