@@ -1,26 +1,31 @@
 package com.utfpr.concessionaria.services.CRUD;
 
 import com.utfpr.concessionaria.dto.CarroDTO;
-import com.utfpr.concessionaria.generic.IService;
 import com.utfpr.concessionaria.modelException.exception.ResourceNotFound;
 import com.utfpr.concessionaria.repositores.CarroRepository;
+import com.utfpr.concessionaria.services.REGRAS.CatalogoService;
 import com.utfpr.concessionaria.view.entities.Carro;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service @Slf4j
-public class CarrosCRUDservice extends IService<CarroDTO> {
+public class CarrosCRUDservice {
 
     private final CarroRepository carroRepository;
+    private final ItemCatalogoCRUDservice itemCatalogoCRUDservice;
+    private final CatalogoService catalogoService;
 
-    public CarrosCRUDservice(CarroRepository carroRepository) {
+    @Autowired
+    public CarrosCRUDservice(CarroRepository carroRepository, ItemCatalogoCRUDservice itemCatalogoCRUDservice, CatalogoService catalogoService) {
         this.carroRepository = carroRepository;
+        this.itemCatalogoCRUDservice = itemCatalogoCRUDservice;
+        this.catalogoService = catalogoService;
     }
 
-    @Override
     public List<CarroDTO> getAll(){
         List<Carro> carros = carroRepository.findAll();
 
@@ -60,8 +65,7 @@ public class CarrosCRUDservice extends IService<CarroDTO> {
         return Optional.of(dto);
     }
 
-    public CarroDTO add(CarroDTO carroDTO){
-
+    public CarroDTO add(CarroDTO carroDTO, Integer quantity){
         Carro car = Carro.builder()
                 .modelo(carroDTO.getModelo())
                 .marca(carroDTO.getMarca())
@@ -73,8 +77,8 @@ public class CarrosCRUDservice extends IService<CarroDTO> {
                 .build();
 
         log.info("Adicionando carros...");
-        carroRepository.save(car);
-
+        carroRepository.save(car);//Adding a new Car to dataBase
+        itemCatalogoCRUDservice.addNewCarToCatalog(car, quantity); //Adding The ItemStock nd the main Content
         return carroDTO;
     }
 
@@ -89,11 +93,11 @@ public class CarrosCRUDservice extends IService<CarroDTO> {
         carroRepository.deleteById(id);
     }
 
-    public CarroDTO update(CarroDTO carroDTO, Long id){
+    public CarroDTO update(CarroDTO carroDTO,Integer quantity , Long id){
         //carroDTO.setId(id);
         delete(id);
 
         log.info("Atualizando carro...");
-        return add(carroDTO);
+        return add(carroDTO, quantity);
     }
 }
