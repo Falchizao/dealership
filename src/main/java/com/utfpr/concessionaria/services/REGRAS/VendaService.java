@@ -4,12 +4,17 @@ import com.utfpr.concessionaria.dto.CarroDTO;
 import com.utfpr.concessionaria.dto.ClienteDTO;
 import com.utfpr.concessionaria.dto.VendaDTO;
 import com.utfpr.concessionaria.generic.IService;
+import com.utfpr.concessionaria.modelException.error.ErrorMessage;
 import com.utfpr.concessionaria.modelException.exception.ResourceNotFound;
+import com.utfpr.concessionaria.repositores.ItemCatalogoRepository;
 import com.utfpr.concessionaria.repositores.VendaRepository;
 import com.utfpr.concessionaria.services.CRUD.CarrosCRUDservice;
 import com.utfpr.concessionaria.services.CRUD.ClientesCRUDservice;
+import com.utfpr.concessionaria.view.entities.Carro;
+import com.utfpr.concessionaria.view.entities.ItemCatalogo;
 import com.utfpr.concessionaria.view.entities.Venda;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.Date;
 import java.util.List;
@@ -26,12 +31,15 @@ public class VendaService extends IService<VendaDTO>{
     private final VendaRepository vendaRepository;
     private final ClientesCRUDservice clienteservice;
     private final CarrosCRUDservice carroService;
+    private final ItemCatalogoRepository itemCatalogoRepository;
 
-    public VendaService(DescontoService descontoService, VendaRepository vendaRepository, ClientesCRUDservice clienteservice, CarrosCRUDservice carroService) {
+    @Autowired
+    public VendaService(ItemCatalogoRepository itemCatalogoRepository, DescontoService descontoService, VendaRepository vendaRepository, ClientesCRUDservice clienteservice, CarrosCRUDservice carroService) {
         this.descontoService = descontoService;
         this.vendaRepository = vendaRepository;
         this.clienteservice = clienteservice;
         this.carroService = carroService;
+        this.itemCatalogoRepository = itemCatalogoRepository;
     }
 
     @Override
@@ -96,17 +104,35 @@ public class VendaService extends IService<VendaDTO>{
 
     @Override
     public VendaDTO add(VendaDTO vendaDTO){
+        //First we need to check if the car is still available
+        //So we call our item repository
+
+        Optional<CarroDTO> carro = carroService.getById(vendaDTO.getIdCarro());
+        if(carro.isEmpty()){ //If not found, we throw a exception
+            throw new ResourceNotFound("Car by id Not found in venda service!");
+        }
+
+        ItemCatalogo itemEmCatalogo = itemCatalogoRepository.findByCarro(Carro.builder()
+                .ano(carro.get().getAno())
+                .cor(carro.get().getCor())
+                .ano(carro.get().getAno())
+                .chassi(carro.get().getChassi())
+                .marca(carro.get().getMarca())
+                .placa(carro.get().getPlaca())
+                .valor(carro.get().getValor()).build());
+
+        if(itemEmCatalogo.getQuantity() < 1){
+            throw new ErrorMessage("Carro selecionado está indisponível!");
+        }
+
+        itemEmCatalogo.setQuantity(itemEmCatalogo.getQuantity() + 1);
+
+        itemCatalogoRepository.save(itemEmCatalogo);
 
         Optional<ClienteDTO> cliente = clienteservice.getById(vendaDTO.getIdCliente());
 
         if(cliente.isEmpty()){ //If not found, we throw a exception
             throw new ResourceNotFound("Cliente by id Not found in venda service!");
-        }
-
-        Optional<CarroDTO> carro = carroService.getById(vendaDTO.getIdCarro());
-
-        if(carro.isEmpty()){ //If not found, we throw a exception
-            throw new ResourceNotFound("Car by id Not found in venda service!");
         }
 
         log.info("Carro selecionado: {}",  carro.get().getMarca());
@@ -124,6 +150,7 @@ public class VendaService extends IService<VendaDTO>{
         //Return DTO
         vendaDTO.setEmailCliente(cliente.get().getEmailCliente());
         vendaDTO.setStatusVenda(venda.getStatusVenda());
+        vendaDTO.setData_venda(venda.getData_venda());
 
         venda = getPaymentInfo(venda,  vendaDTO.getFormaPagamento());
 
