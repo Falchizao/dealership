@@ -3,7 +3,6 @@ package com.utfpr.concessionaria.view.entities;
 import com.utfpr.concessionaria.enums.TipoDesconto;
 import lombok.*;
 
-
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
