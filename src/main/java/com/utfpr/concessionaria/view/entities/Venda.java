@@ -2,11 +2,8 @@ package com.utfpr.concessionaria.view.entities;
 
 import com.utfpr.concessionaria.generic.IModel;
 import com.utfpr.concessionaria.enums.StatusVenda;
-import com.utfpr.concessionaria.enums.TipoVenda;
 import lombok.*;
-
 import javax.persistence.*;
-import java.math.BigDecimal;
 import java.util.Date;
 
 @Entity(name = "tb_venda")

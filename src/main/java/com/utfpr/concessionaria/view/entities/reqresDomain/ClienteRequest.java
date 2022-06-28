@@ -2,9 +2,6 @@ package com.utfpr.concessionaria.view.entities.reqresDomain;
 
 import lombok.*;
 
-import javax.persistence.Column;
-
-
 public class ClienteRequest {
 
     @Getter

@@ -1,10 +1,7 @@
 package com.utfpr.concessionaria.view.entities.reqresDomain;
 
 import lombok.*;
-
-import javax.persistence.Column;
 import java.util.Date;
-
 
 public class CarroRequest {
 

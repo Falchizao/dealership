@@ -2,7 +2,6 @@ package com.utfpr.concessionaria.view.entities;
 
 import com.utfpr.concessionaria.generic.IModel;
 import lombok.*;
-
 import javax.persistence.*;
 
 @Entity(name = "tb_cliente")
@@ -11,36 +10,35 @@ import javax.persistence.*;
 @AllArgsConstructor
 @ToString
 public class Cliente extends IModel {
-    // Atributos
 
     @Getter
     @Setter
-    @Column(name = "nome_cliente", length = 255, nullable = false)
+    @Column(name = "nome_cliente", length = 255, nullable = false, updatable = false)
     private String nomeCliente;
 
     @Getter
     @Setter
-    @Column(name = "cpf_cliente", length = 14, nullable = false)
+    @Column(name = "cpf_cliente", length = 14, nullable = false, updatable = false)
     private String cpfCliente;
 
     @Getter
     @Setter
-    @Column(name = "rg_cliente", length = 12, nullable = false)
+    @Column(name = "rg_cliente", length = 12, nullable = false, updatable = false)
     private String rgCliente;
 
     @Getter
     @Setter
-    @Column(name = "endereco_cliente", length = 255, nullable = false)
+    @Column(name = "endereco_cliente", length = 255, nullable = false, updatable = false)
     private String enderecoCliente;
 
     @Getter
     @Setter
-    @Column(name = "telefone_cliente", length = 15, nullable = false)
+    @Column(name = "telefone_cliente", length = 15, nullable = false, updatable = false)
     private String telefoneCliente;
 
     @Getter
     @Setter
-    @Column(name = "email_cliente", length = 255, nullable = false)
+    @Column(name = "email_cliente", length = 255, nullable = false, updatable = false)
     private String emailCliente;
 
 }

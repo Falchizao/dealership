@@ -1,6 +1,6 @@
 package com.utfpr.concessionaria.services.CRUD;
 
-import com.utfpr.concessionaria.repositores.CarUnitsRepository;
+import com.utfpr.concessionaria.repositores.CarroRepository;
 import com.utfpr.concessionaria.repositores.ItemCatalogoRepository;
 import com.utfpr.concessionaria.services.REGRAS.CatalogoService;
 import com.utfpr.concessionaria.view.entities.Carro;
@@ -11,19 +11,20 @@ import java.util.List;
 
 @Service
 @Slf4j
-public record ItemCatalogoCRUDservice(ItemCatalogoRepository itemCatalogoRepository, CarUnitsRepository carUnitsRepository, CatalogoService catalogoService) {
+public record ItemCatalogoCRUDservice(ItemCatalogoRepository itemCatalogoRepository, CatalogoService catalogoService, CarroRepository carroRepository) {
 
     public void addNewCarToCatalog(Carro newCar, Integer quantity){
-        itemCatalogoRepository.saveAndFlush(
+        ItemCatalogo itemCatalogo = itemCatalogoRepository.saveAndFlush(
                 ItemCatalogo.builder()
                         .carro(newCar)
                         .quantity(quantity)
                         .build());
         log.info("New Car added to the stock with {} units!", quantity);
-        catalogoService.attCarOptions();
+
+        persistEntity(newCar.getId(), itemCatalogo);
     }
 
-    public void removeUnitFromStock(List<ItemCatalogo> cars){
+    private void removeUnitFromStock(List<ItemCatalogo> cars){ //Soon
         log.info("Removing units from stock!");
         cars.stream()
                 .map(
@@ -33,5 +34,16 @@ public record ItemCatalogoCRUDservice(ItemCatalogoRepository itemCatalogoReposit
                         .catalogo(carsAtt.getCatalogo())
                         .build())
                 .forEach(itemCatalogoRepository::save);
+    }
+
+    private void persistEntity(Long idCarro, ItemCatalogo itemCatalog){
+        log.info("Updating relation");
+        carroRepository.updateCarro(idCarro, itemCatalog);
+
+        updateCatalog(itemCatalog);
+    }
+
+    private void updateCatalog(ItemCatalogo item){
+        catalogoService.attCarOptions(item);
     }
 }

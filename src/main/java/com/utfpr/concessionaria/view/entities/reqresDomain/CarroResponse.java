@@ -1,9 +1,7 @@
 package com.utfpr.concessionaria.view.entities.reqresDomain;
 
 import lombok.*;
-
 import java.util.Date;
-
 
 @Builder
 public class CarroResponse {

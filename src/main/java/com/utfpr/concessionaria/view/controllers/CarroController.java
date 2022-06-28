@@ -68,6 +68,7 @@ public class CarroController extends IController<CarroResponse, ResponseEntity<?
                 .build();
 
         dto = carrosCRUDservice.add(dto, carroRequest.getQuantity());
+
         return new ResponseEntity<>(CarroResponse.builder()
                 .modelo(dto.getModelo())
                 .marca(dto.getMarca())

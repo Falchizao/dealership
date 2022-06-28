@@ -1,8 +1,6 @@
 package com.utfpr.concessionaria.enums;
 
-
 public enum TipoVenda {
-
     DINHEIRO{
     },
     PARCELADO{
@@ -12,8 +10,6 @@ public enum TipoVenda {
     CARTAO_DEBITO{
     };
 
-
     TipoVenda() {}
-
 }
 

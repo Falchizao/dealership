@@ -1,6 +1,5 @@
 package com.utfpr.concessionaria.view.entities.reqresDomain;
 
-
 import lombok.*;
 
 public class VendaRequest {

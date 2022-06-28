@@ -1,7 +1,5 @@
 package com.utfpr.concessionaria.generic;
 
-import com.utfpr.concessionaria.dto.AtendenteDTO;
-
 import java.util.List;
 import java.util.Optional;
 

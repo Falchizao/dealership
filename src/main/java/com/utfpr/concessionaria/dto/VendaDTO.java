@@ -2,10 +2,7 @@ package com.utfpr.concessionaria.dto;
 
 import com.utfpr.concessionaria.enums.StatusVenda;
 import lombok.*;
-
 import java.util.Date;
-
-
 
 @Builder
 public class VendaDTO {
@@ -41,7 +38,4 @@ public class VendaDTO {
     @Getter
     @Setter
     private String emailCliente;
-
-
-
 }

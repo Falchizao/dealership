@@ -1,10 +1,7 @@
 package com.utfpr.concessionaria.generic;
 
-import com.utfpr.concessionaria.view.entities.reqresDomain.AtendenteRequest;
-import com.utfpr.concessionaria.view.entities.reqresDomain.AtendenteResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 import java.util.Optional;
 

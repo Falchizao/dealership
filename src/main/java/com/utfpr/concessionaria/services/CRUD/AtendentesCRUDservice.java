@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
 import static com.utfpr.concessionaria.enums.PermissoesAtendente.*;
 
 @Service @Slf4j
@@ -25,9 +24,8 @@ public class AtendentesCRUDservice extends IService<AtendenteDTO> {
 
     @Override
     public List<AtendenteDTO> getAll(){
-        List<Atendente> atendentes = atendenteRepository.findAll();
-
         log.info("Consultando atendentes...");
+        List<Atendente> atendentes = atendenteRepository.findAll();
 
         return atendentes.stream()
                 .map(person -> AtendenteDTO.builder()
@@ -41,32 +39,10 @@ public class AtendentesCRUDservice extends IService<AtendenteDTO> {
     }
 
     @Override
-    public Optional<AtendenteDTO> getById(Long id){
-        log.info("Consultando atendente desejado...");
-
-        Optional<Atendente> person = atendenteRepository.findById(id);
-        if(person.isEmpty()){ //If not found, we throw a exception
-            throw new ResourceNotFound("Atendente by id Not found in service!");
-        }
-
-        AtendenteDTO dto =  AtendenteDTO.builder()
-                .nomeAtendente(person.get().getNomeAtendente())
-                .permissao(switch (person.get().getPermissao()) {
-                    case SEMDESCONTO -> 0;
-                    case PERMITEDESCONTOCOMPLETO -> 1;
-                    case PERMITEDESCONTOPARCIAL -> 2;
-                }).build();
-
-        return Optional.of(dto);
-    }
-
-    @Override
     public AtendenteDTO add(AtendenteDTO atendenteDTO){
-
         Atendente atendente =  Atendente.builder()
                 .nomeAtendente(atendenteDTO.getNomeAtendente())
                 .permissao(switch (atendenteDTO.getPermissao()) {
-                    case 0 -> SEMDESCONTO;
                     case 1 -> PERMITEDESCONTOCOMPLETO;
                     case 2 -> PERMITEDESCONTOPARCIAL;
                     default -> SEMDESCONTO;
@@ -79,30 +55,56 @@ public class AtendentesCRUDservice extends IService<AtendenteDTO> {
     }
 
     @Override
+    public Optional<AtendenteDTO> getById(Long id){
+        Optional<Atendente> person = findAtendente(id);
+
+        AtendenteDTO dto =  AtendenteDTO.builder()
+                .nomeAtendente(person.get().getNomeAtendente())
+                .permissao(switch (person.get().getPermissao()) {
+                    case SEMDESCONTO -> 0;
+                    case PERMITEDESCONTOCOMPLETO -> 1;
+                    case PERMITEDESCONTOPARCIAL -> 2;
+                }).build();
+        return Optional.of(dto);
+    }
+
+    @Override
     public void delete(Long id){
-        Optional<Atendente> atendente = atendenteRepository.findById(id);
-
-        if(atendente.isEmpty()){ //If not found, we throw a exception
-            throw new ResourceNotFound("Atendente by id Not found!");
-        }
-
-        log.info("Deletando atendente...");
-        atendenteRepository.deleteById(id);
+        atendenteRepository.deleteById(verifyAtendente(id));
     }
 
     @Override
     public AtendenteDTO update(AtendenteDTO atendenteDTO, Long id){
-        //Passar o id pro Banco, depois deletar o objeto da DB, e adicionar a nova com o body att
-        //atendenteDTO.setId(id); //Se o spring recebe um objeto com id, significa que é para att, caso não, é pra cadastrar
-        delete(id);
-
         log.info("Atualizando atendente...");
+        delete(id);
         return add(atendenteDTO);
     }
 
     public PermissoesAtendente getPermissao(Long id){
         Optional<Atendente> person = atendenteRepository.findById(id);
         return person.get().getPermissao();
+    }
+
+    private Long verifyAtendente(Long id){
+        log.info("Procurando atendente...");
+        Optional<Atendente> atendente = atendenteRepository.findById(id);
+        if(atendente.isEmpty()){
+            throw new ResourceNotFound("Atendente Not found!");
+        }
+
+        log.info("Deletando atendente...");
+        return id;
+    }
+
+    private Optional<Atendente> findAtendente(Long id){
+        log.info("Consultando atendente desejado...");
+        Optional<Atendente> person = atendenteRepository.findById(id);
+
+        if(person.isEmpty()){ //If not found, we throw a exception
+            throw new ResourceNotFound("Atendente by id Not found in service!");
+        }
+
+        return person;
     }
 
 }

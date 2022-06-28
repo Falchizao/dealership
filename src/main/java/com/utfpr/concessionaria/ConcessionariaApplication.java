@@ -2,30 +2,30 @@ package com.utfpr.concessionaria;
 
 import com.utfpr.concessionaria.dto.CarroDTO;
 import com.utfpr.concessionaria.services.CRUD.CarrosCRUDservice;
-import com.utfpr.concessionaria.view.entities.Carro;
-import com.utfpr.concessionaria.view.entities.Catalogo;
-import com.utfpr.concessionaria.view.entities.ItemCatalogo;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.event.EventListener;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 @SpringBootApplication
+@Slf4j
+@PropertySource("classpath:application.properties")
 public class ConcessionariaApplication {
-    public static void main(String[] args) {
-        SpringApplication.run(ConcessionariaApplication.class, args);
-    }
 
     @Autowired
     private CarrosCRUDservice carService;
+
+    public static void main(String[] args) {
+        SpringApplication.run(ConcessionariaApplication.class, args);
+    }
 
     @Bean
     public MessageSource messageSource() {
@@ -39,8 +39,12 @@ public class ConcessionariaApplication {
     @EventListener(ApplicationReadyEvent.class)
     public void startAndGreetings() throws ParseException {
 
+        //Formatter for CarDate
         SimpleDateFormat genericDateFormatter = new SimpleDateFormat("dd/MM/yyyy");
 
+        //1st Car Routine
+        log.info("Attempting to add the car");
+        //Create Object
         carService.add(
                 CarroDTO.builder()
                         .modelo("Sedan")
@@ -52,18 +56,23 @@ public class ConcessionariaApplication {
                         .valor(30000.00)
                         .build(), 1);
 
+        //2nd Car Routine
+        log.info("Attempting to add the car");
+        //Create Object
         carService.add(
                 CarroDTO.builder()
                         .modelo("Eletrico")
                         .marca("Tesla")
                         .cor("Preto")
                         .ano(genericDateFormatter.parse("01/01/2020"))
-                        .placa("ABC12345")
-                        .chassi("123456789012346")
+                        .placa("ABC1434")
+                        .chassi("123456784022345")
                         .valor(40000.00)
                         .build(), 1);
 
-
+        //3rd Car Routine
+        log.info("Attempting to add the car");
+        //Create Object
         carService.add(
                 CarroDTO.builder()
                         .modelo("Conversivel")
@@ -71,10 +80,13 @@ public class ConcessionariaApplication {
                         .cor("Vermelho")
                         .ano(genericDateFormatter.parse("01/01/2014"))
                         .placa("ABC1236")
-                        .chassi("123456789012347")
+                        .chassi("123445689012348")
                         .valor(50000.00)
                         .build(), 2);
 
+        //4th car Routine
+        log.info("Attempting to add the car");
+        //Create Object
         carService.add(
                 CarroDTO.builder()
                         .modelo("Fusca")
@@ -86,6 +98,9 @@ public class ConcessionariaApplication {
                         .valor(60000.00)
                         .build(), 2);
 
+        //5th car Routine
+        log.info("Attempting to add the car");
+        //Create Object
         carService.add(
                 CarroDTO.builder()
                         .modelo("Gol Bolinha")
@@ -95,9 +110,10 @@ public class ConcessionariaApplication {
                         .placa("ABC1264")
                         .chassi("123442789012348")
                         .valor(70000.00)
-                        .build(), 1);
+                        .build(), 3);
 
-        System.out.println("Obrigado por utilizar nossos serviços de concessionaria!");
+        //Finish
+        log.info("Obrigado por utilizar nossos serviços de concessionaria!");
     }
 
 }

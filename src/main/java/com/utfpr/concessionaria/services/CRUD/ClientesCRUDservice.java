@@ -22,11 +22,11 @@ public class ClientesCRUDservice extends IService<ClienteDTO> {
 
     @Override
     public List<ClienteDTO> getAll(){
+        log.info("Consultando clientes...");
         List<Cliente> clientes = clienteRepository.findAll();
 
-        log.info("Consultando clientes...");
         return clientes.stream()
-                .map(person -> ClienteDTO.builder() //Entitie builder for return
+                .map(person -> ClienteDTO.builder()
                         .nomeCliente(person.getNomeCliente())
                         .cpfCliente(person.getCpfCliente())
                         .rgCliente(person.getRgCliente())
@@ -38,29 +38,7 @@ public class ClientesCRUDservice extends IService<ClienteDTO> {
     }
 
     @Override
-    public Optional<ClienteDTO> getById(Long id){
-        log.info("Consultando cliente desejado...");
-
-        Optional<Cliente> person = clienteRepository.findById(id);
-        if(person.isEmpty()){ //If not found, we throw a exception
-            throw new ResourceNotFound("Cliente by id Not found in service!");
-        }
-
-        ClienteDTO dto = ClienteDTO.builder() //Entitie builder for return
-                .nomeCliente(person.get().getNomeCliente())
-                .cpfCliente(person.get().getCpfCliente())
-                .rgCliente(person.get().getRgCliente())
-                .enderecoCliente(person.get().getEnderecoCliente())
-                .telefoneCliente(person.get().getTelefoneCliente())
-                .emailCliente(person.get().getEmailCliente())
-                .build();
-
-        return Optional.of(dto);
-    }
-
-    @Override
     public ClienteDTO add(ClienteDTO clienteDTO){
-
         Cliente cliente = Cliente.builder()
                 .nomeCliente(clienteDTO.getNomeCliente())
                 .cpfCliente(clienteDTO.getCpfCliente())
@@ -77,21 +55,51 @@ public class ClientesCRUDservice extends IService<ClienteDTO> {
     }
 
     @Override
+    public Optional<ClienteDTO> getById(Long id){
+        Optional<Cliente> person = findCliente(id);
+
+        ClienteDTO dto = ClienteDTO.builder() //Entitie builder for return
+                .nomeCliente(person.get().getNomeCliente())
+                .cpfCliente(person.get().getCpfCliente())
+                .rgCliente(person.get().getRgCliente())
+                .enderecoCliente(person.get().getEnderecoCliente())
+                .telefoneCliente(person.get().getTelefoneCliente())
+                .emailCliente(person.get().getEmailCliente())
+                .build();
+
+        return Optional.of(dto);
+    }
+
+    @Override
     public void delete(Long id){
-        Optional<Cliente> cliente = clienteRepository.findById(id);
-
-        if(cliente.isEmpty()){
-            throw new ResourceNotFound("Cliente by id Not found!");
-        }
-
-        log.info("Deletando cliente...");
-        clienteRepository.deleteById(id);
+        clienteRepository.deleteById(verifyCliente(id));
     }
 
     @Override
     public ClienteDTO update(ClienteDTO clienteDTO, Long id){
-        delete(id);
         log.info("Atualizando cliente...");
+        delete(id);
         return add(clienteDTO);
+    }
+
+    private Long verifyCliente(Long id){
+        Optional<Cliente> cliente = clienteRepository.findById(id);
+        if(cliente.isEmpty()){
+            throw new ResourceNotFound("Cliente Not found!");
+        }
+
+        log.info("Deletando cliente...");
+        return id;
+    }
+
+    public Optional<Cliente> findCliente(Long id){
+        log.info("Consultando cliente desejado...");
+        Optional<Cliente> person = clienteRepository.findById(id);
+
+        if(person.isEmpty()){ //If not found, we throw a exception
+            throw new ResourceNotFound("Cliente by id Not found in service!");
+        }
+
+        return person;
     }
 }

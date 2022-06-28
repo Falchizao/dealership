@@ -3,7 +3,6 @@ package com.utfpr.concessionaria.dto;
 import com.utfpr.concessionaria.generic.IModel;
 import lombok.*;
 
-
 @Builder
 public class ClienteDTO extends IModel {
 
@@ -30,9 +29,4 @@ public class ClienteDTO extends IModel {
     @Getter
     @Setter
     private String emailCliente;
-
-
-
-
-
 }

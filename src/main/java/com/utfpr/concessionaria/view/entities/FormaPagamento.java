@@ -3,21 +3,24 @@ package com.utfpr.concessionaria.view.entities;
 import com.utfpr.concessionaria.enums.TipoVenda;
 import com.utfpr.concessionaria.generic.IModel;
 import lombok.*;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import java.math.BigDecimal;
 
-@Entity(name = "forma_pagamento")
+@Entity(name = "info_pagamento")
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
 public class FormaPagamento extends IModel {
 
+    @Setter
+    @Column(name = "total_a_pagar")
+    private BigDecimal totalAPagar;
+
     @Getter
     @Setter
-    @Column(name = "tipoVenda")
+    @Column(name = "tipo_pagamento")
     private TipoVenda tipoVenda;
 
     @Getter
@@ -58,6 +61,7 @@ public class FormaPagamento extends IModel {
     @Setter
     @Column(name = "entrada_venda")
     private BigDecimal entradaVenda;
+
 }
 
 

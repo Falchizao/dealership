@@ -2,7 +2,6 @@ package com.utfpr.concessionaria.view.entities.reqresDomain;
 
 import lombok.*;
 
-
 @Builder
 public class ClienteResponse {
 

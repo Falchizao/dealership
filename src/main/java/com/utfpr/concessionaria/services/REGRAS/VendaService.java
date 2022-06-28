@@ -1,16 +1,13 @@
 package com.utfpr.concessionaria.services.REGRAS;
 
-import com.utfpr.concessionaria.dto.CarroDTO;
-import com.utfpr.concessionaria.dto.ClienteDTO;
 import com.utfpr.concessionaria.dto.VendaDTO;
 import com.utfpr.concessionaria.generic.IService;
 import com.utfpr.concessionaria.modelException.error.ErrorMessage;
 import com.utfpr.concessionaria.modelException.exception.ResourceNotFound;
 import com.utfpr.concessionaria.repositores.ItemCatalogoRepository;
 import com.utfpr.concessionaria.repositores.VendaRepository;
-import com.utfpr.concessionaria.services.CRUD.CarrosCRUDservice;
 import com.utfpr.concessionaria.services.CRUD.ClientesCRUDservice;
-import com.utfpr.concessionaria.view.entities.Carro;
+import com.utfpr.concessionaria.view.entities.Cliente;
 import com.utfpr.concessionaria.view.entities.ItemCatalogo;
 import com.utfpr.concessionaria.view.entities.Venda;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +17,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
 import static com.utfpr.concessionaria.enums.StatusVenda.PENDENTE;
 
 @Service
@@ -30,25 +26,23 @@ public class VendaService extends IService<VendaDTO>{
     private final DescontoService descontoService;
     private final VendaRepository vendaRepository;
     private final ClientesCRUDservice clienteservice;
-    private final CarrosCRUDservice carroService;
     private final ItemCatalogoRepository itemCatalogoRepository;
 
     @Autowired
-    public VendaService(ItemCatalogoRepository itemCatalogoRepository, DescontoService descontoService, VendaRepository vendaRepository, ClientesCRUDservice clienteservice, CarrosCRUDservice carroService) {
+    public VendaService(ItemCatalogoRepository itemCatalogoRepository, DescontoService descontoService, VendaRepository vendaRepository, ClientesCRUDservice clienteservice) {
         this.descontoService = descontoService;
         this.vendaRepository = vendaRepository;
         this.clienteservice = clienteservice;
-        this.carroService = carroService;
         this.itemCatalogoRepository = itemCatalogoRepository;
     }
 
     @Override
     public List<VendaDTO> getAll(){
+        log.info("Consultando vendas...");
         List<Venda> vendas = vendaRepository.findAll();
 
-        log.info("Consultando vendas...");
         return vendas.stream()
-                .map(venda ->  VendaDTO.builder() //Entitie builder for return
+                .map(venda ->  VendaDTO.builder()
                         .idCliente(venda.getIdCliente())
                         .idCarro(venda.getCarro())
                         .atendente(venda.getAtendente())
@@ -62,12 +56,7 @@ public class VendaService extends IService<VendaDTO>{
 
     @Override
     public Optional<VendaDTO> getById(Long id){
-        log.info("Consultando venda desejada...");
-
-        Optional<Venda> venda = vendaRepository.findById(id);
-        if(venda.isEmpty()){ //If not found, we throw a exception
-            throw new ResourceNotFound("Venda by id Not found in service!");
-        }
+        Optional<Venda> venda = findVenda(id);
 
         VendaDTO dto = VendaDTO.builder()
                 .idCliente(venda.get().getIdCliente())
@@ -84,88 +73,87 @@ public class VendaService extends IService<VendaDTO>{
 
     @Override
     public void delete(Long id){
-        Optional<Venda> venda = vendaRepository.findById(id);
-
-        if(venda.isEmpty()){
-            throw new ResourceNotFound("Venda by id Not found!");
-        }
-
-        log.info("Deletando venda...");
-        vendaRepository.deleteById(id);
+        vendaRepository.deleteById(verifyVenda(id));
     }
 
     @Override
     public VendaDTO update(VendaDTO vendaDTO, Long id){
-        //vendaDTO.setId(id);
-        delete(id);
         log.info("Atualizando venda...");
+        delete(id);
         return add(vendaDTO);
     }
 
     @Override
     public VendaDTO add(VendaDTO vendaDTO){
-        //First we need to check if the car is still available
-        //So we call our item repository
+        Optional<ItemCatalogo> itemEmCatalogo = itemCatalogoRepository.finderByCar(vendaDTO.getIdCarro()); //Check Catalog Quantity
+        trataVenda(itemEmCatalogo.get()); //Routine Quantity
+        Optional<Cliente> cliente = clienteservice.findCliente(vendaDTO.getIdCliente()); //Get Client for the transactional
+        Venda venda = getPaymentInfo(vendaBuilder(vendaDTO, cliente.get()),  vendaDTO.getFormaPagamento()); //Manipulating the parcels and discounts
+        saveVenda(venda); //Saving the sale
 
-        Optional<CarroDTO> carro = carroService.getById(vendaDTO.getIdCarro());
-        if(carro.isEmpty()){ //If not found, we throw a exception
-            throw new ResourceNotFound("Car by id Not found in venda service!");
+        return setComprovanteVenda(venda, vendaDTO, cliente.get()); //Sale info return;
+    }
+
+    private Optional<Venda> findVenda(Long id){
+        log.info("Consultando venda desejada...");
+        Optional<Venda> venda = vendaRepository.findById(id);
+
+        if(venda.isEmpty()){ //If not found, we throw a exception
+            throw new ResourceNotFound("Venda by id Not found in service!");
         }
 
-        ItemCatalogo itemEmCatalogo = itemCatalogoRepository.findByCarro(Carro.builder()
-                .ano(carro.get().getAno())
-                .cor(carro.get().getCor())
-                .ano(carro.get().getAno())
-                .chassi(carro.get().getChassi())
-                .marca(carro.get().getMarca())
-                .placa(carro.get().getPlaca())
-                .valor(carro.get().getValor()).build());
+        return venda;
+    }
 
-        if(itemEmCatalogo.getQuantity() < 1){
-            throw new ErrorMessage("Carro selecionado está indisponível!");
+    private Long verifyVenda(Long id){
+        Optional<Venda> venda = vendaRepository.findById(id);
+
+        if(venda.isEmpty()){
+            throw new ResourceNotFound("Venda Not found!");
         }
 
-        itemEmCatalogo.setQuantity(itemEmCatalogo.getQuantity() + 1);
+        log.info("Deletando venda...");
+        return id;
+    }
 
-        itemCatalogoRepository.save(itemEmCatalogo);
+    private Venda getPaymentInfo(Venda venda, Integer paymentMethod){ //Informações sobre o pagamento da venda
+        log.info("Enviando venda para calculo de desconto...");
+        return descontoService.manipulaValorDescontoVenda(venda, paymentMethod);
+    }
 
-        Optional<ClienteDTO> cliente = clienteservice.getById(vendaDTO.getIdCliente());
-
-        if(cliente.isEmpty()){ //If not found, we throw a exception
-            throw new ResourceNotFound("Cliente by id Not found in venda service!");
+    private void trataVenda(ItemCatalogo itemEmCatalogo){
+        if(itemEmCatalogo.getQuantity() >= 1) //update routine
+        {
+            itemCatalogoRepository.updateUnit(itemEmCatalogo.getQuantity() - 1, itemEmCatalogo.getId());
+        }else //No Stock for this unit
+        {
+            throw new ErrorMessage("Este Carro não está mais disponível em estoque!");
         }
+    }
 
-        log.info("Carro selecionado: {}",  carro.get().getMarca());
+    private void saveVenda(Venda venda){
+        log.info("Salvando venda...");
+        vendaRepository.save(venda);
+    }
 
-        Venda venda = Venda.builder() //Entitie builder for save
+    private Venda vendaBuilder(VendaDTO vendaDTO, Cliente cliente){
+        return Venda.builder()
                 .idCliente(vendaDTO.getIdCliente())
                 .carro(vendaDTO.getIdCarro())
                 .atendente(vendaDTO.getAtendente())
                 .data_venda(new Date())
                 .statusVenda(PENDENTE)
-                .emailCliente(cliente.get().getEmailCliente())
+                .emailCliente(cliente.getEmailCliente())
                 .idPagamento(vendaDTO.getIdPagamento())
                 .build();
+    }
 
-        //Return DTO
-        vendaDTO.setEmailCliente(cliente.get().getEmailCliente());
+    private VendaDTO setComprovanteVenda(Venda venda,VendaDTO vendaDTO,Cliente cliente){
+        vendaDTO.setEmailCliente(cliente.getEmailCliente());
         vendaDTO.setStatusVenda(venda.getStatusVenda());
         vendaDTO.setData_venda(venda.getData_venda());
-
-        venda = getPaymentInfo(venda,  vendaDTO.getFormaPagamento());
-
-        vendaDTO.setIdPagamento(venda.getIdPagamento());        //Set Payment Method for return
-
-        log.info("Salvando venda...");
-        vendaRepository.save(venda);
+        vendaDTO.setIdPagamento(venda.getIdPagamento());
 
         return vendaDTO;
     }
-
-    public Venda getPaymentInfo(Venda venda, Integer paymentMethod){ //Informações sobre o pagamento da venda
-        log.info("Enviando venda para calculo de desconto...");
-        return descontoService.manipulaValorDescontoVenda(venda, paymentMethod);
-    }
-
-
 }
