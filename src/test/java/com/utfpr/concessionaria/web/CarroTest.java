@@ -3,6 +3,8 @@ package com.utfpr.concessionaria.web;
 import com.utfpr.concessionaria.repositores.CarroRepository;
 import com.utfpr.concessionaria.view.controllers.CarroController;
 import com.utfpr.concessionaria.view.entities.Carro;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +29,14 @@ public class CarroTest {
     @MockBean
     private CarroRepository carroRepository;
 
+    @BeforeEach
+    public void setUp() {
+        carroRepository.deleteAll();
+    }
+
+
     @Test
+    @DisplayName("Should return all cars")
     public void find_all_cars() throws Exception {
         Carro carroTeste = Carro.builder()
                 .modelo("Sedan")
