@@ -3,6 +3,8 @@ package com.utfpr.concessionaria.web;
 import com.utfpr.concessionaria.repositores.ClienteRepository;
 import com.utfpr.concessionaria.view.controllers.ClienteController;
 import com.utfpr.concessionaria.view.entities.Cliente;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +28,13 @@ public class ClienteTest {
     @MockBean
     private ClienteRepository clienteRepository;
 
+    @BeforeEach
+    public void setUp() {
+        clienteRepository.deleteAll();
+    }
+
     @Test
+    @DisplayName("Should return all clients")
     public void find_all_clients() throws Exception {
         Cliente cliente = Cliente.builder()
                 .nomeCliente("Valcir")
