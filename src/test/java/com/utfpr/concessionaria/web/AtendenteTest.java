@@ -3,6 +3,8 @@ package com.utfpr.concessionaria.web;
 import com.utfpr.concessionaria.repositores.AtendenteRepository;
 import com.utfpr.concessionaria.view.controllers.AtendenteController;
 import com.utfpr.concessionaria.view.entities.Atendente;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +30,13 @@ public class AtendenteTest {
     @MockBean
     private AtendenteRepository atendenteRepository;
 
+    @BeforeEach
+    public void setUp() {
+        atendenteRepository.deleteAll();
+    }
+
     @Test
+    @DisplayName("Should return all attendants")
     public void find_all_attendants() throws Exception {
         Atendente atendente = Atendente.builder()
                     .nomeAtendente("Valcir")
