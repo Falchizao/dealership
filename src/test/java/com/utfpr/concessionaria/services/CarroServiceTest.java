@@ -21,12 +21,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import com.utfpr.concessionaria.view.entities.Venda;
 import java.util.Date;
 
 @ExtendWith(MockitoExtension.class)
 public class CarroServiceTest {
 
+    @Mock
     private Utils utils;
 
     @Mock
@@ -54,7 +54,7 @@ public class CarroServiceTest {
     @DisplayName("JUNIT for Save Car")
     @Test
     public void givenCarObject_whenSaveCar_thenReturnCarObject(){
-        // given - precondition or setup
+        //Arrange --Preparation
         given(carroRepository.findById(carro.getId()))
                 .willReturn(Optional.empty());
 
@@ -63,11 +63,12 @@ public class CarroServiceTest {
         System.out.println(carroRepository);
         System.out.println(undetest);
 
-        // when -  action or the behaviour that we are going test
+        //Act --Action
         Carro savedCar = carroRepository.save(carro);
 
         System.out.println(savedCar);
-        // then - verify the output
+
+        //Assert -- Confirmation
         assertThat(savedCar).isNotNull();
     }
 
@@ -75,27 +76,26 @@ public class CarroServiceTest {
     @DisplayName("JUnit test for saveCar method which throws exception")
     @Test
     public void givenExistingId_whenSaveCar_thenThrowsException(){
-        // given - precondition or setup
+        //Arrange --Preparation
         given(carroRepository.findById(carro.getId()))
                 .willReturn(Optional.of(carro));
 
         System.out.println(carroRepository);
         System.out.println(undetest);
 
-        // when -  action or the behaviour that we are going test
+        //Act --Action
         org.junit.jupiter.api.Assertions.assertThrows(ResourceNotFound.class, () -> {
             carroRepository.save(carro);
         });
 
-        // then
-        verify(carroRepository, never()).save(any(Carro.class));
+        //Assert -- Confirmation()).save(any(Carro.class));
     }
 
     // JUnit test for getAllCars method
     @DisplayName("JUnit test for getAllCars method")
     @Test
     public void givenCarsList_whenGetAllCars_thenReturnCarsList(){
-        // given - precondition or setup
+        //Arrange --Preparation
         Carro carro1 = Carro.builder()
                 .modelo("Eletrico")
                 .marca("Tesla")
@@ -108,10 +108,10 @@ public class CarroServiceTest {
 
         given(carroRepository.findAll()).willReturn(List.of(carro,carro1));
 
-        // when -  action or the behaviour that we are going test
+        //Act --Action
         List<CarroDTO> carros = undetest.getAll();
 
-        // then - verify the output
+        //Assert -- Confirmation
         assertThat(carros).isNotNull();
         assertThat(carros.size()).isEqualTo(2);
     }
@@ -120,14 +120,14 @@ public class CarroServiceTest {
     @DisplayName("JUnit test for getAllCars method (negative scenario)")
     @Test
     public void givenEmptyCarList_whenGetAllCars_thenReturnEmptyCarsList(){
-        // given - precondition or setup
+        //Arrange --Preparation
 
         given(carroRepository.findAll()).willReturn(Collections.emptyList());
 
-        // when -  action or the behaviour that we are going test
+        //Act --Action
         List<CarroDTO> carrosList = undetest.getAll();
 
-        // then - verify the output
+        //Assert -- Confirmation
         assertThat(carrosList).isEmpty();
         assertThat(carrosList.size()).isEqualTo(0);
     }
@@ -136,14 +136,13 @@ public class CarroServiceTest {
     @DisplayName("JUnit test for getCarById method")
     @Test
     public void givenCarId_whenGetCarById_thenReturnCarObject(){
-        // given
+        //Arrange --Preparation
         given(carroRepository.findById(1L)).willReturn(Optional.of(carro));
 
         // when
         CarroDTO savedSale = undetest.getById(carro.getId()).get();
 
-        // then
-        assertThat(savedSale).isNotNull();
+        //Assert -- Confirmation
 
     }
 
@@ -151,14 +150,14 @@ public class CarroServiceTest {
     @DisplayName("JUnit test for updateCars method")
     @Test
     public void givenCarsObject_whenUpdateCar_thenReturnUpdatedCar(){
-        // given - precondition or setup
+        //Arrange --Preparation
         given(carroRepository.save(carro)).willReturn(carro);
         carro.setCor("Laranja");
 
-        // when -  action or the behaviour that we are going test
+        //Act --Action
         CarroDTO updatedCar = undetest.update((utils.mapCarToCarDTO(carro)), 2 , carro.getId());
 
-        // then - verify the output
+        //Assert -- Confirmation
         assertThat(updatedCar.getCor()).isEqualTo("Laranja");
     }
 
@@ -166,15 +165,15 @@ public class CarroServiceTest {
     @DisplayName("JUnit test for deleteCar method")
     @Test
     public void givenCarId_whenDeleteCar_thenNothing(){
-        // given - precondition or setup
+        //Arrange --Preparation
         long carroId = 1L;
 
         willDoNothing().given(carroRepository).deleteById(carroId);
 
-        // when -  action or the behaviour that we are going test
+        //Act --Action
         undetest.delete(carroId);
 
-        // then - verify the output
+        //Assert -- Confirmation
         verify(carroRepository, times(1)).deleteById(carroId);
     }
 
