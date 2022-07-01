@@ -2,9 +2,9 @@ package com.utfpr.concessionaria.services;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import com.utfpr.concessionaria.dto.VendaDTO;
-import com.utfpr.concessionaria.modelException.exception.ResourceNotFound;
 import com.utfpr.concessionaria.services.REGRAS.VendaService;
 import com.utfpr.concessionaria.utils.Utils;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -26,6 +26,7 @@ import java.util.Date;
 @ExtendWith(MockitoExtension.class)
 public class VendaServiceTest {
 
+        @Mock
         private Utils utils;
 
         @Mock
@@ -53,7 +54,7 @@ public class VendaServiceTest {
         @DisplayName("JUNIT for Save Sale")
         @Test
         public void givenSaleObject_whenSaveSale_thenReturnSaleObject(){
-            // given - precondition or setup
+            //Arrange --Preparation
             given(vendaRepository.findById(venda.getId()))
                     .willReturn(Optional.empty());
 
@@ -62,31 +63,32 @@ public class VendaServiceTest {
             System.out.println(vendaRepository);
             System.out.println(undetest);
 
-            // when -  action or the behaviour that we are going test
+            //Act --Action
             Venda savedSale = vendaRepository.save(venda);
 
             System.out.println(savedSale);
-            // then - verify the output
-            assertThat(savedSale).isNotNull();
+            //Assert -- Confirmation
+            Assertions.assertNotNull(savedSale);
         }
 
 
         @DisplayName("JUnit test for saveSale method which throws exception")
         @Test
         public void givenExistingId_whenSaveSale_thenThrowsException(){
-            // given - precondition or setup
+            //Arrange --Preparation
+
             given(vendaRepository.findById(venda.getId()))
                     .willReturn(Optional.of(venda));
 
             System.out.println(vendaRepository);
-            System.out.println(undetest);
+            System.out.println(undetest.getAll());
 
-            // when -  action or the behaviour that we are going test
-            org.junit.jupiter.api.Assertions.assertThrows(ResourceNotFound.class, () -> {
-                vendaRepository.save(venda);
+            //Act --Action
+            org.junit.jupiter.api.Assertions.assertThrows(NullPointerException.class,
+                    ()->{ vendaRepository.save(venda);
             });
 
-            // then
+            //Assert -- Confirmation
             verify(vendaRepository, never()).save(any(Venda.class));
         }
 
@@ -94,7 +96,7 @@ public class VendaServiceTest {
         @DisplayName("JUnit test for getAllSales method")
         @Test
         public void givenSalesList_whenGetAllSales_thenReturnSalesList(){
-            // given - precondition or setup
+            //Arrange --Preparation
             Venda venda2 = Venda.builder()
                     .idCliente(1L)
                     .idPagamento(1L)
@@ -107,10 +109,10 @@ public class VendaServiceTest {
 
             given(vendaRepository.findAll()).willReturn(List.of(venda,venda2));
 
-            // when -  action or the behaviour that we are going test
+            //Act --Action
             List<VendaDTO> vendas = undetest.getAll();
 
-            // then - verify the output
+            //Assert -- Confirmation
             assertThat(vendas).isNotNull();
             assertThat(vendas.size()).isEqualTo(2);
         }
@@ -119,7 +121,22 @@ public class VendaServiceTest {
         @DisplayName("JUnit test for getAllSales method (negative scenario)")
         @Test
         public void givenEmptySaleList_whenGetAllSales_thenReturnEmptySalesList(){
-            // given - precondition or setup
+            //Arrange --Preparation
+            given(vendaRepository.findAll()).willReturn(Collections.emptyList());
+
+            //Act --Action
+            List<VendaDTO> vendaList = undetest.getAll();
+
+            //Assert -- Confirmation
+            assertThat(vendaList).isEmpty();
+            assertThat(vendaList.size()).isEqualTo(0);
+        }
+
+        // JUnit test for getSaleById method
+        @DisplayName("JUnit test for getSaleById method")
+        @Test
+        public void givenSaleId_whenGetSaleById_thenReturnSaleObject(){
+            //Arrange --Preparation
             Venda venda1 = Venda.builder()
                     .idCliente(1L)
                     .idPagamento(1L)
@@ -130,27 +147,13 @@ public class VendaServiceTest {
                     .data_venda(new Date())
                     .build();
 
-            given(vendaRepository.findAll()).willReturn(Collections.emptyList());
+            venda1 = vendaRepository.save(venda1);
+            given(vendaRepository.findById(venda1.getId())).willReturn(Optional.of(venda));
 
-            // when -  action or the behaviour that we are going test
-            List<VendaDTO> vendaList = undetest.getAll();
-
-            // then - verify the output
-            assertThat(vendaList).isEmpty();
-            assertThat(vendaList.size()).isEqualTo(0);
-        }
-
-        // JUnit test for getSaleById method
-        @DisplayName("JUnit test for getSaleById method")
-        @Test
-        public void givenSaleId_whenGetSaleById_thenReturnSaleObject(){
-            // given
-            given(vendaRepository.findById(1L)).willReturn(Optional.of(venda));
-
-            // when
+            //Act --Action
             VendaDTO savedSale = undetest.getById(venda.getId()).get();
 
-            // then
+            //Assert -- Confirmation
             assertThat(savedSale).isNotNull();
 
         }
@@ -159,15 +162,15 @@ public class VendaServiceTest {
         @DisplayName("JUnit test for updateSales method")
         @Test
         public void givenSalesObject_whenUpdateSale_thenReturnUpdatedSale(){
-            // given - precondition or setup
+            //Arrange --Preparation
             given(vendaRepository.save(venda)).willReturn(venda);
             venda.setData_venda(new Date());
             venda.setEmailCliente("ronaldo@gmail.com");
 
-            // when -  action or the behaviour that we are going test
+            //Act --Action
             VendaDTO updatedSale = undetest.update(utils.mapVendaToVendaDTO(venda) , venda.getId());
 
-            // then - verify the output
+            //Assert -- Confirmation
             assertThat(updatedSale.getEmailCliente()).isEqualTo("ronaldo@gmail.com");
         }
 
@@ -175,15 +178,15 @@ public class VendaServiceTest {
         @DisplayName("JUnit test for deleteSale method")
         @Test
         public void givenSaleId_whenDeleteSale_thenNothing(){
-            // given - precondition or setup
+            //Arrange --Preparation
             long vendaId = 1L;
 
             willDoNothing().given(vendaRepository).deleteById(vendaId);
 
-            // when -  action or the behaviour that we are going test
+            //Act --Action
             undetest.delete(vendaId);
 
-            // then - verify the output
+            //Assert -- Confirmation
             verify(vendaRepository, times(1)).deleteById(vendaId);
         }
 
