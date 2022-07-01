@@ -27,6 +27,7 @@ import java.util.Optional;
 @ExtendWith(MockitoExtension.class)
 public class AtendenteServiceTest {
 
+    @Mock
     private Utils utils;
 
     @Mock
@@ -50,7 +51,7 @@ public class AtendenteServiceTest {
     @DisplayName("JUNIT for Save Attendant")
     @Test
     public void givenAttendantObject_whenSaveAttendant_thenReturnAttendantObject(){
-        // given - precondition or setup
+        //Arrange --Preparation
         given(atendenteRepositoryRepository.findById(atendente.getId()))
                 .willReturn(Optional.empty());
 
@@ -59,11 +60,11 @@ public class AtendenteServiceTest {
         System.out.println(atendenteRepositoryRepository);
         System.out.println(undetest);
 
-        // when -  action or the behaviour that we are going test
+        //Act --Action
         Atendente savedAttendant = atendenteRepositoryRepository.save(atendente);
 
         System.out.println(savedAttendant);
-        // then - verify the output
+        //Assert -- Confirmation
         assertThat(savedAttendant).isNotNull();
     }
 
@@ -71,14 +72,14 @@ public class AtendenteServiceTest {
     @DisplayName("JUnit test for saveAttendant method which throws exception")
     @Test
     public void givenExistingId_whenSaveAttendant_thenThrowsException(){
-        // given - precondition or setup
+        //Arrange --Preparation
         given(atendenteRepositoryRepository.findById(atendente.getId()))
                 .willReturn(Optional.of(atendente));
 
         System.out.println(atendenteRepositoryRepository);
         System.out.println(undetest);
 
-        // when -  action or the behaviour that we are going test
+        //Act --Action
         org.junit.jupiter.api.Assertions.assertThrows(ResourceNotFound.class, () -> {
             atendenteRepositoryRepository.save(atendente);
         });
@@ -91,7 +92,7 @@ public class AtendenteServiceTest {
     @DisplayName("JUnit test for getAllAttendants method")
     @Test
     public void givenAttendantList_whenGetAllAttendant_thenReturnAttendantList(){
-        // given - precondition or setup
+        //Arrange --Preparation
         Atendente atendente1 = Atendente.builder()
                         .nomeAtendente("Ronaldinho")
                         .senha("213")
@@ -99,10 +100,10 @@ public class AtendenteServiceTest {
 
         given(atendenteRepositoryRepository.findAll()).willReturn(List.of(atendente,atendente1));
 
-        // when -  action or the behaviour that we are going test
+        //Act --Action
         List<AtendenteDTO> atendentes = undetest.getAll();
 
-        // then - verify the output
+        //Assert -- Confirmation
         assertThat(atendentes).isNotNull();
         assertThat(atendentes.size()).isEqualTo(2);
     }
@@ -111,21 +112,21 @@ public class AtendenteServiceTest {
     @DisplayName("JUnit test for getAllAttendants method (negative scenario)")
     @Test
     public void givenEmptySaleList_whenGetAllSales_thenReturnEmptySalesList(){
-        // given - precondition or setup
+        //Arrange --Preparation
         given(atendenteRepositoryRepository.findAll()).willReturn(Collections.emptyList());
 
-        // when -  action or the behaviour that we are going test
+        //Act --Action
         List<AtendenteDTO> atendentesList = undetest.getAll();
 
-        // then - verify the output
+        //Assert -- Confirmation
         assertThat(atendentesList).isEmpty();
         assertThat(atendentesList.size()).isEqualTo(0);
     }
 
     // JUnit test for getAttendantById method
-    @DisplayName("JUnit test for getAttendantById method")
+    @DisplayName("JUnit test for getAttendantById method negative")
     @Test
-    public void givenSaleId_whenGetSaleById_thenReturnSaleObject(){
+    public void givenAttendantIdThatNotExists_whenGetAttendantById_thenThrowError(){
         // given
         given(atendenteRepositoryRepository.findById(1L)).willReturn(Optional.of(atendente));
 
@@ -140,16 +141,16 @@ public class AtendenteServiceTest {
     // JUnit test for updateAttendant method
     @DisplayName("JUnit test for updateAttendant method")
     @Test
-    public void givenSalesObject_whenUpdateSale_thenReturnUpdatedSale(){
-        // given - precondition or setup
+    public void givenAttendantObject_whenUpdateSale_thenReturnUpdatedAttendant(){
+        //Arrange --Preparation
         given(atendenteRepositoryRepository.save(atendente)).willReturn(atendente);
         atendente.setNomeAtendente("FALCHI");
         atendente.setSenha("pass");
 
-        // when -  action or the behaviour that we are going test
+        //Act --Action
         AtendenteDTO updatedAttendant = undetest.update(utils.mapAtendenteToAtendenteDTO(atendente) , atendente.getId());
 
-        // then - verify the output
+        //Assert -- Confirmation
         assertThat(updatedAttendant.getNomeAtendente()).isEqualTo("FALCHI");
     }
 
@@ -157,15 +158,15 @@ public class AtendenteServiceTest {
     @DisplayName("JUnit test for deleteAttendant method")
     @Test
     public void givenSaleId_whenDeleteSale_thenNothing(){
-        // given - precondition or setup
+        //Arrange --Preparation
         long atendenteId = 1L;
 
         willDoNothing().given(atendenteRepositoryRepository).deleteById(atendenteId);
 
-        // when -  action or the behaviour that we are going test
+        //Act --Action
         undetest.delete(atendenteId);
 
-        // then - verify the output
+        //Assert -- Confirmation
         verify(atendenteRepositoryRepository, times(1)).deleteById(atendenteId);
     }
 
