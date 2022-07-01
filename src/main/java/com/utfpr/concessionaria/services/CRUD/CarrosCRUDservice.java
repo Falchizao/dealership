@@ -78,7 +78,6 @@ public class CarrosCRUDservice {
 
     public CarroDTO update(CarroDTO carroDTO,Integer quantity, Long id){
         delete(id);
-
         log.info("Atualizando carro...");
         return add(carroDTO, quantity);
     }
