@@ -22,11 +22,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.Date;
 
 @ExtendWith(MockitoExtension.class)
 public class ClienteServiceTest {
 
+    @Mock
     private Utils utils;
 
     @Mock
@@ -51,7 +51,7 @@ public class ClienteServiceTest {
     @DisplayName("JUNIT for Save Client")
     @Test
     public void givenClientObject_whenClientSale_thenReturnClientObject(){
-        // given - precondition or setup
+        //Arrange --Preparation
         given(clienteRepository.findById(cliente.getId()))
                 .willReturn(Optional.empty());
 
@@ -60,11 +60,11 @@ public class ClienteServiceTest {
         System.out.println(clienteRepository);
         System.out.println(undetest);
 
-        // when -  action or the behaviour that we are going test
+        //Act --Action
         Cliente savedClient = clienteRepository.save(cliente);
 
         System.out.println(savedClient);
-        // then - verify the output
+        //Assert -- Confirmation
         assertThat(savedClient).isNotNull();
     }
 
@@ -72,19 +72,19 @@ public class ClienteServiceTest {
     @DisplayName("JUnit test for saveClient method which throws exception")
     @Test
     public void givenExistingId_whenSaveClient_thenThrowsException(){
-        // given - precondition or setup
+        //Arrange --Preparation
         given(clienteRepository.findById(cliente.getId()))
                 .willReturn(Optional.of(cliente));
 
         System.out.println(clienteRepository);
         System.out.println(undetest);
 
-        // when -  action or the behaviour that we are going test
+        //Act --Action
         org.junit.jupiter.api.Assertions.assertThrows(ResourceNotFound.class, () -> {
             clienteRepository.save(cliente);
         });
 
-        // then
+        //Assert -- Confirmation
         verify(clienteRepository, never()).save(any(Cliente.class));
     }
 
@@ -92,7 +92,7 @@ public class ClienteServiceTest {
     @DisplayName("JUnit test for getAllClients method")
     @Test
     public void givenClientsList_whenGetAllClients_thenReturnClientsList(){
-        // given - precondition or setup
+        //Arrange --Preparation
         Cliente cliente2 = Cliente.builder()
                 .emailCliente("falchi@gmail.com")
                 .cpfCliente("24532345432")
@@ -102,10 +102,10 @@ public class ClienteServiceTest {
 
         given(clienteRepository.findAll()).willReturn(List.of(cliente,cliente2));
 
-        // when -  action or the behaviour that we are going test
+        //Act --Action
         List<ClienteDTO> clientes = undetest.getAll();
 
-        // then - verify the output
+        //Assert -- Confirmation
         assertThat(clientes).isNotNull();
         assertThat(clientes.size()).isEqualTo(2);
     }
@@ -114,13 +114,13 @@ public class ClienteServiceTest {
     @DisplayName("JUnit test for getAllClients method (negative scenario)")
     @Test
     public void givenEmptyClientList_whenGetAllClients_thenReturnEmptyClientsList(){
-        // given - precondition or setup
+        //Arrange --Preparation
         given(clienteRepository.findAll()).willReturn(Collections.emptyList());
 
-        // when -  action or the behaviour that we are going test
+        //Act --Action
         List<ClienteDTO> clientsList = undetest.getAll();
 
-        // then - verify the output
+        //Assert -- Confirmation
         assertThat(clientsList).isEmpty();
         assertThat(clientsList.size()).isEqualTo(0);
     }
@@ -129,13 +129,13 @@ public class ClienteServiceTest {
     @DisplayName("JUnit test for getClientById method")
     @Test
     public void givenClientId_whenGetClientById_thenReturnClientObject(){
-        // given
+        //Arrange --Preparation
         given(clienteRepository.findById(1L)).willReturn(Optional.of(cliente));
 
-        // when
+        //Act --Action
         ClienteDTO savedClient = undetest.getById(cliente.getId()).get();
 
-        // then
+        //Assert -- Confirmation
         assertThat(savedClient).isNotNull();
 
     }
@@ -144,15 +144,15 @@ public class ClienteServiceTest {
     @DisplayName("JUnit test for updateClients method")
     @Test
     public void givenClientsObject_whenUpdateClient_thenReturnUpdatedClient(){
-        // given - precondition or setup
+        //Arrange --Preparation
         given(clienteRepository.save(cliente)).willReturn(cliente);
 
         cliente.setEmailCliente("ronaldo@gmail.com");
 
-        // when -  action or the behaviour that we are going test
+        //Act --Action
         ClienteDTO updatedClient = undetest.update(utils.mapClienteToClienteDTO(cliente) , cliente.getId());
 
-        // then - verify the output
+        //Assert -- Confirmation
         assertThat(updatedClient.getEmailCliente()).isEqualTo("ronaldo@gmail.com");
     }
 
@@ -160,15 +160,15 @@ public class ClienteServiceTest {
     @DisplayName("JUnit test for deleteClient method")
     @Test
     public void givenClientId_whenDeleteClient_thenNothing(){
-        // given - precondition or setup
+        //Arrange --Preparation
         long clienteId = 1L;
 
         willDoNothing().given(clienteRepository).deleteById(clienteId);
 
-        // when -  action or the behaviour that we are going test
+        //Act --Action
         undetest.delete(clienteId);
 
-        // then - verify the output
+        //Assert -- Confirmation
         verify(clienteRepository, times(1)).deleteById(clienteId);
     }
 
